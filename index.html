@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 創價歡樂夏令營｜運營本部管理平台</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="2026創價歡樂夏令營運營本部平台。結合東海朝陽與六龜服務隊，本平台提供GOOGLE行事曆串接、運營進度即時回報等兩大核心功能，協同管理更高效。">
+  <meta name="keywords" content="2026創價歡樂夏令營, 東海朝陽, 六龜服務隊, GOOGLE行事曆, 運營回報, 生命教育">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            camp: {
+              sky: {
+                light: '#e0f2fe',
+                DEFAULT: '#0ea5e9',
+                dark: '#0369a1',
+              },
+              orange: {
+                light: '#ffedd5',
+                DEFAULT: '#f97316',
+                dark: '#c2410c',
+              },
+              amber: {
+                light: '#fef9c3',
+                DEFAULT: '#eab308',
+                dark: '#a16207',
+              },
+              teal: {
+                light: '#ccfbf1',
+                DEFAULT: '#14b8a6',
+                dark: '#0f766e',
+              }
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'Plus Jakarta Sans', 'Noto Sans TC', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'float-slow': 'float 8s ease-in-out infinite',
+            'float-fast': 'float 5s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spin-slow': 'spin 12s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0) scale(1)' },
+              '50%': { transform: 'translateY(-12px) scale(1.03)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom Styles for Scrollbars and Patterns -->
+  <style>
+    body {
+      font-family: 'Outfit', 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(241, 245, 249, 0.1);
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.3);
+      border-radius: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.5);
+    }
+    .dots-pattern {
+      background-image: radial-gradient(#cbd5e1 1.2px, transparent 1.2px);
+      background-size: 20px 20px;
+    }
+    .dark-dots-pattern {
+      background-image: radial-gradient(#334155 1.2px, transparent 1.2px);
+      background-size: 20px 20px;
+    }
+    /* Animated Gradient Borders */
+    .gradient-border-glow {
+      position: relative;
+    }
+    .gradient-border-glow::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px; right: -1px; bottom: -1px;
+      background: linear-gradient(135deg, #0ea5e9, #f97316, #eab308);
+      border-radius: inherit;
+      z-index: -1;
+      opacity: 0.15;
+      transition: opacity 0.3s ease;
+    }
+    .gradient-border-glow:hover::before {
+      opacity: 0.4;
+    }
+  </style>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-camp-orange selection:text-white dots-pattern min-h-screen flex flex-col justify-between">
+
+  <!-- ==================== NAVIGATION BAR ==================== -->
+  <nav class="sticky top-0 z-50 bg-white/75 backdrop-blur-lg border-b border-slate-200/60 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <!-- Logo and Title -->
+        <a href="#" class="flex items-center space-x-3 group animate-fade-in">
+          <div class="bg-gradient-to-br from-camp-sky to-camp-orange p-2.5 rounded-xl text-white shadow-md shadow-sky-100 group-hover:scale-105 transition-transform duration-300">
+            <i data-lucide="sun" class="w-6 h-6 animate-spin-slow"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-lg sm:text-xl font-extrabold tracking-wider bg-gradient-to-r from-camp-sky-dark via-slate-800 to-camp-orange-dark bg-clip-text text-transparent">
+              2026 創價歡樂夏令營
+            </span>
+            <span class="text-xs font-bold text-slate-500 tracking-wide uppercase sm:block hidden">
+              運營本部管理平台 · 東海朝陽六龜服務隊
+            </span>
+          </div>
+        </a>
+
+        <!-- Desktop Menu Links -->
+        <div class="hidden md:flex items-center space-x-6">
+          <a href="#calendar-section" class="text-slate-600 hover:text-camp-sky font-bold transition-colors duration-200 flex items-center space-x-1.5 py-2 px-3 rounded-lg hover:bg-slate-100/50">
+            <i data-lucide="calendar" class="w-4 h-4 text-camp-sky"></i>
+            <span>Google行事曆</span>
+          </a>
+          <a href="#progress-section" class="text-slate-600 hover:text-camp-sky font-bold transition-colors duration-200 flex items-center space-x-1.5 py-2 px-3 rounded-lg hover:bg-slate-100/50">
+            <i data-lucide="activity" class="w-4 h-4 text-camp-orange"></i>
+            <span>運營進度回報</span>
+          </a>
+        </div>
+
+        <!-- System Controls -->
+        <div class="hidden md:flex items-center space-x-3">
+          <div class="flex items-center bg-slate-100 rounded-full px-3.5 py-1.5 border border-slate-200">
+            <span class="relative flex h-2 w-2 mr-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="text-xs font-semibold text-slate-600">系統儲存正常</span>
+          </div>
+          <button onclick="resetSystemData()" class="p-2 text-slate-400 hover:text-rose-500 rounded-xl hover:bg-rose-50 border border-slate-100 hover:border-rose-100 transition-all" title="重置為初始展示資料">
+            <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none transition-colors duration-200" aria-label="Toggle Menu">
+            <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Overlay Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-lg absolute left-0 right-0 shadow-lg transition-all duration-300">
+      <div class="px-4 pt-3 pb-6 space-y-3">
+        <a href="#calendar-section" class="mobile-nav-link block px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-bold hover:text-camp-sky flex items-center space-x-3 transition-colors">
+          <i data-lucide="calendar" class="w-5 h-5 text-camp-sky"></i>
+          <span>Google行事曆串接</span>
+        </a>
+        <a href="#progress-section" class="mobile-nav-link block px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-bold hover:text-camp-sky flex items-center space-x-3 transition-colors">
+          <i data-lucide="activity" class="w-5 h-5 text-camp-orange"></i>
+          <span>運營進度回報</span>
+        </a>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+          <button onclick="resetSystemData()" class="flex items-center space-x-2 py-2 px-4 rounded-xl text-slate-500 hover:text-rose-500 bg-slate-50 hover:bg-rose-50 w-full justify-center transition-all font-bold">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            <span>重置展示資料</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <header class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white py-16 lg:py-24 dark-dots-pattern">
+    <!-- Floating Background Decor Elements -->
+    <div class="absolute top-1/4 left-10 w-24 h-24 bg-camp-sky/15 rounded-full blur-xl animate-float-slow sm:block hidden"></div>
+    <div class="absolute bottom-1/5 right-12 w-40 h-40 bg-camp-orange/15 rounded-full blur-2xl animate-float-fast"></div>
+    <div class="absolute top-12 right-1/4 w-32 h-32 bg-camp-amber/15 rounded-full blur-xl animate-float-slow"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Hero Text Contents -->
+        <div class="lg:col-span-8 text-center lg:text-left space-y-6">
+          <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 animate-pulse-slow">
+            <span class="bg-camp-orange text-white font-extrabold text-xs px-2.5 py-1 rounded-full uppercase tracking-wider">運營本部</span>
+            <span class="text-sm font-semibold tracking-wide text-indigo-100">2026 暑期營隊強檔啟動</span>
+          </div>
+          
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+            2026 創價歡樂夏令營
+            <span class="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-camp-sky via-camp-amber to-camp-orange">
+              東海朝陽 · 六龜服務隊！
+            </span>
+          </h1>
+
+
+        </div>
+
+        <!-- Hero Countdown Frame -->
+        <div class="lg:col-span-4 flex justify-center items-center">
+          <div class="relative w-full max-w-sm rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 p-6 shadow-2xl flex flex-col justify-between animate-float-slow">
+            <div class="flex justify-between items-center mb-6">
+              <span class="bg-white/10 text-camp-amber px-3 py-1 rounded-full text-xs font-bold tracking-wider">
+                ⏰ 營隊倒數
+              </span>
+              <div class="text-slate-400"><i data-lucide="compass" class="w-6 h-6 animate-spin-slow"></i></div>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="text-center py-4">
+              <div class="grid grid-cols-4 gap-2" id="countdown-container">
+                <div class="bg-slate-900/60 p-2.5 rounded-xl border border-white/10">
+                  <span class="block text-2xl sm:text-3xl font-extrabold text-white" id="cd-days">00</span>
+                  <span class="text-[10px] text-slate-400 font-bold">天</span>
+                </div>
+                <div class="bg-slate-900/60 p-2.5 rounded-xl border border-white/10">
+                  <span class="block text-2xl sm:text-3xl font-extrabold text-white" id="cd-hours">00</span>
+                  <span class="text-[10px] text-slate-400 font-bold">時</span>
+                </div>
+                <div class="bg-slate-900/60 p-2.5 rounded-xl border border-white/10">
+                  <span class="block text-2xl sm:text-3xl font-extrabold text-white" id="cd-mins">00</span>
+                  <span class="text-[10px] text-slate-400 font-bold">分</span>
+                </div>
+                <div class="bg-slate-900/60 p-2.5 rounded-xl border border-white/10">
+                  <span class="block text-2xl sm:text-3xl font-extrabold text-white text-camp-orange" id="cd-secs">00</span>
+                  <span class="text-[10px] text-slate-400 font-bold">秒</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 bg-slate-900/50 p-4.5 rounded-2xl border border-white/5 text-center">
+              <div class="flex items-center justify-center space-x-2 text-camp-sky mb-1">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                <span class="text-xs sm:text-sm font-extrabold">2026年7月3日-7月4日正式開營</span>
+              </div>
+              <p class="text-xs text-slate-400 font-medium">營地：高雄六龜國小</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Organic wave divider -->
+    <div class="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 translate-y-px">
+      <svg class="relative block w-full h-[30px] md:h-[40px]" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="fill-slate-50"></path>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ==================== SECTION 1: GOOGLE CALENDAR ==================== -->
+  <section id="calendar-section" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
+      <div class="inline-flex items-center space-x-2 bg-sky-50 text-camp-sky px-4.5 py-1.5 rounded-full border border-sky-100">
+        <i data-lucide="calendar" class="w-4 h-4"></i>
+        <span class="text-xs font-extrabold uppercase tracking-widest">Calendar Sync</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">2026創價歡樂夏令營 GOOGLE 行事曆</h2>
+      <div class="w-16 h-1 bg-gradient-to-r from-camp-sky to-indigo-500 rounded-full mx-auto"></div>
+      <p class="text-slate-500 font-bold">即時串接與同步 Google 日曆，追蹤夏令營籌備會議、培訓與三日實體活動大綱。</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      <!-- Calendar content container (Left, lg:col-span-8) -->
+      <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200/60 shadow-lg overflow-hidden min-h-[480px] flex flex-col justify-between">
+        <!-- Render custom calendar or iframe -->
+        <div id="calendar-container" class="flex-grow w-full h-full flex flex-col justify-between">
+          <!-- Dynamic loading indicator / calendar rendering will replace this -->
+        </div>
+      </div>
+
+      <!-- Calendar Sidebar Panel (Right, lg:col-span-4) -->
+      <div class="lg:col-span-4 bg-white rounded-3xl p-6 border border-slate-200/60 shadow-lg flex flex-col justify-between hidden lg:flex" id="calendar-sidebar-container">
+        <!-- This will be rendered dynamically by JavaScript -->
+      </div>
+    </div>
+
+  <!-- ==================== CALENDAR SETTINGS MODAL ==================== -->
+  <div id="calendar-settings-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden transition-all duration-300 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-200 w-full max-w-lg mx-4 overflow-hidden transform scale-95 transition-all duration-300" id="settings-modal-panel">
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-camp-sky to-indigo-600 text-white px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="settings" class="w-5 h-5 text-white"></i>
+          <span class="font-extrabold tracking-wide text-white">Google 行事曆串接設定</span>
+        </div>
+        <button onclick="closeCalendarSettings()" class="text-white/80 hover:text-white transition-colors" type="button">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="p-6 space-y-4">
+        <div class="flex items-center justify-between text-xs bg-slate-50 p-3 rounded-xl border border-slate-200">
+          <span id="cal-status-text" class="font-bold text-slate-600">當前狀態：載入中...</span>
+          <button id="cal-reset-btn" onclick="clearCalendarSrc()" class="text-rose-500 font-bold hover:underline hidden flex items-center">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5 mr-1"></i> 清除連結
+          </button>
+        </div>
+        
+        <form onsubmit="saveCalendarSrc(event)" class="space-y-4">
+          <p class="text-xs text-slate-500 leading-relaxed font-bold">
+            您可以串接您自己班級或籌備會的 Google 公開日曆。請輸入 Google 日曆 ID、日曆嵌入連結，或直接貼上完整的 iframe HTML 碼。
+          </p>
+          <div>
+            <label for="calendar-input" class="block text-xs font-extrabold text-slate-700 mb-1.5">日曆 ID 或 內嵌網址 / HTML *</label>
+            <textarea id="calendar-input" rows="4" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-sky focus:border-camp-sky transition-all placeholder:text-slate-400 text-xs font-mono font-medium" placeholder="例如：your-calendar-id@group.calendar.google.com&#10;或完整 iframe 嵌入程式碼..."></textarea>
+          </div>
+          <div class="bg-indigo-50/50 p-3.5 rounded-xl border border-indigo-100/50 text-[11px] text-slate-500 font-bold space-y-1">
+            <p class="text-indigo-600 font-extrabold flex items-center">
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 mr-1"></i> 如何取得公開日曆 ID？
+            </p>
+            <p>1. 開啟 Google 日曆網頁版，進入欲分享日曆的「設定和共用」。</p>
+            <p>2. 在「共用特定人員」或「存取權限」勾選「公開此日曆」。</p>
+            <p>3. 在下方「整合日曆」段落複製「日曆 ID」。</p>
+          </div>
+          <!-- Actions -->
+          <div class="flex items-center space-x-3 pt-2">
+            <button type="button" onclick="closeCalendarSettings()" class="w-1/2 inline-flex justify-center items-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition-all">
+              <span>取消</span>
+            </button>
+            <button type="submit" class="w-1/2 inline-flex justify-center items-center py-2.5 rounded-xl bg-camp-sky hover:bg-camp-sky-dark text-white font-bold text-xs shadow-md shadow-sky-100 transition-all">
+              <i data-lucide="check" class="w-4 h-4 mr-1.5"></i>
+              <span>儲存並串接</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- ==================== SECTION 2: OPERATION PROGRESS REPORTING ==================== -->
+  <section id="progress-section" class="py-16 bg-slate-100/60 border-y border-slate-200/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
+        <div class="inline-flex items-center space-x-2 bg-orange-50 text-camp-orange px-4.5 py-1.5 rounded-full border border-orange-100">
+          <i data-lucide="activity" class="w-4 h-4"></i>
+          <span class="text-xs font-extrabold uppercase tracking-widest">Ops Tracker</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">各組運營進度即時回報</h2>
+        <div class="w-16 h-1 bg-gradient-to-r from-camp-orange to-amber-500 rounded-full mx-auto"></div>
+        <p class="text-slate-500 font-bold">各籌備組組員定期提交準備進度日誌，即時彙整成統計圖表與活動籌備時間軸。</p>
+      </div>
+
+      <!-- Department progress overview widgets -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center space-x-4">
+          <div class="p-3 bg-sky-50 text-camp-sky rounded-xl shrink-0"><i data-lucide="briefcase" class="w-6 h-6"></i></div>
+          <div>
+            <span class="block text-2xl font-black text-slate-800" id="dept-hq-progress">0%</span>
+            <span class="text-xs text-slate-400 font-bold">運營本部</span>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center space-x-4">
+          <div class="p-3 bg-orange-50 text-camp-orange rounded-xl shrink-0"><i data-lucide="sparkles" class="w-6 h-6"></i></div>
+          <div>
+            <span class="block text-2xl font-black text-slate-800" id="dept-tunghai-progress">0%</span>
+            <span class="text-xs text-slate-400 font-bold">東海夢想&隊輔組</span>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex items-center space-x-4">
+          <div class="p-3 bg-teal-50 text-camp-teal rounded-xl shrink-0"><i data-lucide="compass" class="w-6 h-6"></i></div>
+          <div>
+            <span class="block text-2xl font-black text-slate-800" id="dept-chaoyang-progress">0%</span>
+            <span class="text-xs text-slate-400 font-bold">朝陽勇氣&隊輔組</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Submit report form card -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/60 shadow-lg relative overflow-hidden order-2 lg:order-1">
+          <!-- Translucent Deco Bar -->
+          <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-camp-orange to-camp-amber"></div>
+
+          <div class="flex items-center space-x-2.5 pb-4 border-b border-slate-100 mb-6">
+            <div class="p-2 bg-orange-50 rounded-xl text-camp-orange"><i data-lucide="edit-3" class="w-5 h-5"></i></div>
+            <h3 class="text-lg font-black text-slate-800">上傳會議與進度記錄</h3>
+          </div>
+
+          <form id="progress-report-form" class="space-y-4" onsubmit="submitProgressReport(event)">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="report-dept" class="block text-xs font-extrabold text-slate-600 mb-1.5">所屬組別 *</label>
+                <select id="report-dept" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-orange focus:border-camp-orange transition-all text-slate-600 text-sm font-medium">
+                  <option value="" disabled selected>請選擇組別</option>
+                  <option value="運營本部">運營本部</option>
+                  <option value="東海夢想&隊輔組">東海夢想&隊輔組</option>
+                  <option value="朝陽勇氣&隊輔組">朝陽勇氣&隊輔組</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="report-time" class="block text-xs font-extrabold text-slate-600 mb-1.5">會議時間 *</label>
+                <input type="datetime-local" id="report-time" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-orange focus:border-camp-orange transition-all text-slate-600 text-sm font-medium">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="report-attendees" class="block text-xs font-extrabold text-slate-600 mb-1.5">參與者 & 記錄人員 *</label>
+                <input type="text" id="report-attendees" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-orange focus:border-camp-orange transition-all placeholder:text-slate-400 text-sm font-medium" placeholder="如：林小華(記錄)、陳大同">
+              </div>
+
+              <div>
+                <label for="report-progress" class="block text-xs font-extrabold text-slate-600 mb-1.5">目前整體進度 (%) *</label>
+                <div class="relative">
+                  <input type="number" id="report-progress" required min="0" max="100" inputmode="numeric" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-orange focus:border-camp-orange transition-all placeholder:text-slate-400 text-sm font-mono" placeholder="0 - 100">
+                  <span class="absolute right-4 top-2.5 text-slate-400 text-sm font-bold">%</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="report-content" class="block text-xs font-extrabold text-slate-600 mb-1.5">1. 運營項目與進度 *</label>
+              <textarea id="report-content" required rows="2" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-orange focus:border-camp-orange transition-all placeholder:text-slate-400 text-sm font-medium" placeholder="請詳細說明會議決議與目前進度..."></textarea>
+            </div>
+
+            <div>
+              <label for="report-pending" class="block text-xs font-extrabold text-slate-600 mb-1.5">2. 待完成項目 *</label>
+              <textarea id="report-pending" required rows="2" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-orange focus:border-camp-orange transition-all placeholder:text-slate-400 text-sm font-medium" placeholder="後續待完成事項與分工追蹤..."></textarea>
+            </div>
+
+            <div>
+              <label for="report-other" class="block text-xs font-extrabold text-slate-600 mb-1.5">3. 其他備註說明</label>
+              <textarea id="report-other" rows="2" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-camp-orange focus:border-camp-orange transition-all placeholder:text-slate-400 text-sm font-medium" placeholder="臨時交辦事項或會議備註說明..."></textarea>
+            </div>
+
+            <div>
+              <label class="block text-xs font-extrabold text-slate-600 mb-1.5">相關附檔 / 證件照片（模擬）</label>
+              <div class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50 transition-all relative" onclick="triggerFileSelect('report-file')">
+                <input type="file" id="report-file" class="hidden" onchange="handleFileSelected(event, 'report-file-name')">
+                <div class="space-y-1 text-slate-400">
+                  <i data-lucide="upload-cloud" class="w-8 h-8 mx-auto text-slate-300"></i>
+                  <p class="text-xs font-semibold text-slate-500" id="report-file-name">點選或拖曳檔案上傳</p>
+                  <p class="text-[9px]">支援 PDF, XLSX, PNG, JPG，檔案大小小於 10MB</p>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full inline-flex justify-center items-center py-3 rounded-xl bg-camp-orange hover:bg-camp-orange-dark text-white font-bold text-sm shadow-md shadow-orange-100 hover:shadow-lg active:scale-95 transition-all">
+              <i data-lucide="check" class="w-4 h-4 mr-2"></i>
+              <span>發布會議與進度記錄</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Timeline container -->
+        <div class="lg:col-span-7 space-y-6 order-1 lg:order-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-black text-slate-800 flex items-center">
+              <i data-lucide="clock" class="w-5 h-5 mr-2 text-camp-orange"></i>
+              會議與進度記錄歷史時間軸
+            </h3>
+            <span class="text-xs bg-slate-200 text-slate-600 font-bold px-2.5 py-1 rounded-full border border-slate-300/40" id="report-list-counter">0 筆記錄</span>
+          </div>
+
+          <!-- Horizontal scrollable filter bar -->
+          <div class="flex items-center space-x-2 overflow-x-auto pb-2 custom-scrollbar shrink-0 -mx-1 px-1" id="timeline-filter-bar">
+            <button type="button" onclick="filterTimeline('all')" id="filter-btn-all" class="px-3.5 py-1.5 text-xs font-bold rounded-full bg-slate-800 text-white border border-slate-800 transition-all shrink-0 shadow-sm shadow-slate-200">全部</button>
+            <button type="button" onclick="filterTimeline('運營本部')" id="filter-btn-hq" class="px-3.5 py-1.5 text-xs font-bold rounded-full bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all shrink-0">運營本部</button>
+            <button type="button" onclick="filterTimeline('東海夢想&隊輔組')" id="filter-btn-tunghai" class="px-3.5 py-1.5 text-xs font-bold rounded-full bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all shrink-0">東海夢想&隊輔組</button>
+            <button type="button" onclick="filterTimeline('朝陽勇氣&隊輔組')" id="filter-btn-chaoyang" class="px-3.5 py-1.5 text-xs font-bold rounded-full bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all shrink-0">朝陽勇氣&隊輔組</button>
+          </div>
+
+          <!-- Timeline feed -->
+          <div class="relative border-l-2 border-slate-300 ml-2 sm:ml-4 space-y-6 pb-4" id="progress-timeline">
+            <!-- Dynamically populated report items -->
+          </div>
+
+          <!-- Empty list state placeholder -->
+          <div id="timeline-empty-state" class="hidden bg-white rounded-3xl border border-slate-200/60 p-12 text-center flex flex-col items-center justify-center space-y-4">
+            <div class="p-3 bg-slate-50 rounded-full text-slate-400">
+              <i data-lucide="layers" class="w-10 h-10"></i>
+            </div>
+            <div>
+              <h4 class="text-base font-bold text-slate-700">目前尚無進度日誌</h4>
+              <p class="text-slate-400 text-xs mt-1 max-w-sm">請使用左方表單提交您組別的準備進度，日誌與進度更新將呈現在此。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 pt-12 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-8 border-b border-slate-800/80">
+        <!-- Info Column -->
+        <div class="md:col-span-8 space-y-4">
+          <div class="flex items-center space-x-3 text-white">
+            <div class="bg-gradient-to-br from-camp-sky to-camp-orange p-1.5 rounded-lg text-white">
+              <i data-lucide="sun" class="w-5 h-5"></i>
+            </div>
+            <span class="text-lg font-black tracking-widest">2026 創價歡樂夏令營</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-semibold">
+            這是一個凝聚智慧與服務熱誠的台中二圈青年部運營本部。東海&朝陽大學會前往六龜國小進行偏鄉服務，本著創價精神與哲學關懷在地與SDGs的理念，攜手帶給孩子充滿意義的熱情盛夏。
+          </p>
+          <div class="flex space-x-3">
+            <span class="text-xs bg-slate-800 text-slate-300 py-1 px-3.5 rounded-full border border-slate-700 font-bold">2026 創價歡樂夏令營 台中二圈 六龜服務隊</span>
+          </div>
+        </div>
+
+        <!-- Links Columns -->
+        <div class="md:col-span-4 space-y-3">
+          <h4 class="text-sm font-extrabold text-white uppercase tracking-wider">兩大核心功能</h4>
+          <ul class="space-y-2 text-xs sm:text-sm font-semibold">
+            <li><a href="#calendar-section" class="hover:text-white transition-colors">1. Google行事曆串接</a></li>
+            <li><a href="#progress-section" class="hover:text-white transition-colors">2. 運營準備進度回報</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- Copyright Info -->
+      <div class="pt-6 text-center text-xs font-semibold text-slate-500 flex flex-col sm:flex-row sm:justify-between items-center gap-3">
+        <p>© 2026 創價歡樂夏令營運營本部 暨 東海朝陽六龜服務隊. All Rights Reserved.</p>
+        <div class="flex space-x-4">
+          <a href="#" class="hover:text-slate-400">系統資料存於瀏覽器 LocalStorage</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // --- GLOBAL CONSTANTS & STORAGE KEYS ---
+    const CALENDAR_SRC_KEY = 'soka_camp_calendar_src';
+    const REPORTS_KEY = 'soka_camp_reports_v1';
+
+    // --- MOCK DATABASE STATE ---
+    const mockReports = [
+      {
+        id: 'rep-1',
+        meetingTime: '2026-05-20T14:00',
+        attendees: '林小華(記錄)、李大同、王美惠',
+        dept: '運營本部',
+        progress: 90,
+        content: '確認本屆營隊主題為「夢想起飛 · 勇氣啟航」，確認高雄六龜國小場地租借、水電及住宿配置，已發函完成申請。',
+        pendingItems: '1. 與六龜國小確認冷氣收費標準。\n2. 彙整隊員家長同意書與保險名冊。',
+        other: '預計下週召開第二次運營會議。',
+        fileName: 'operations_venue_approval.pdf',
+        timestamp: new Date(Date.now() - 3600000 * 24 * 3).toISOString() // 3 days ago
+      },
+      {
+        id: 'rep-2',
+        meetingTime: '2026-05-21T10:00',
+        attendees: '陳大同(記錄)、黃信介、小隊輔全體',
+        dept: '東海夢想&隊輔組',
+        progress: 80,
+        content: '進行第一階段團康破冰教案設計演練，小隊呼與隊旗範本製作完成。',
+        pendingItems: '1. 分配各小隊輔的負責小隊。\n2. 準備破冰遊戲道具材料清單。',
+        other: '隊輔們配合度極高，氣氛熱烈。',
+        fileName: 'icebreaker_game_draft.xlsx',
+        timestamp: new Date(Date.now() - 3600000 * 24 * 2).toISOString() // 2 days ago
+      },
+      {
+        id: 'rep-3',
+        meetingTime: '2026-05-22T09:00',
+        attendees: '施明德(記錄)、朝陽隊輔組成員',
+        dept: '朝陽勇氣&隊輔組',
+        progress: 85,
+        content: '完成大地遊戲「勇氣森林」五個關卡的流程及備案規劃，完成安全風險評估表格。',
+        pendingItems: '1. 採購闖關所需的防蚊液及醫藥用品。\n2. 製作關卡NPC道具。',
+        other: '高雄7月氣溫高，需加強防曬與補充水分宣導。',
+        fileName: 'courage_forest_sop.pdf',
+        timestamp: new Date(Date.now() - 3600000 * 24 * 1).toISOString() // 1 day ago
+      }
+    ];
+
+    // --- STATE VARIABLES ---
+    let selectedEventDate = '2026-07-03'; // Default focused event on calendar load
+
+    // Local Fallback Calendar Event Mock Database (July 2026)
+    const localEvents = {
+      '2026-06-26': {
+        title: '志工行前大會 & 籌備驗收',
+        time: '19:00 - 21:30',
+        location: '東海大學社科院演講廳',
+        desc: '行前流程最後排練、小隊輔話劇與舞蹈驗收，發放第一批志工手冊與物資包。',
+        owner: '行政組 - 林小華'
+      },
+      '2026-07-02': {
+        title: '服務隊先進駐 & 場地佈置',
+        time: '09:00 - 18:00',
+        location: '高雄六龜國小',
+        desc: '全體志工包車進駐六龜基地，整理營地宿舍、佈置活動會場、確認音響與電力設備。',
+        owner: '生活組 - 張惠君'
+      },
+      '2026-07-03': {
+        title: '夏令營 D1：破冰破航 · 建立默契',
+        time: '08:30 - 17:00',
+        location: '高雄六龜國小活動中心',
+        desc: '營員報到相見歡、破冰團康大賽、創意小隊隊呼與隊旗設計繪製、森林大地遊戲闖關。',
+        owner: '活動組 - 陳大同'
+      },
+      '2026-07-04': {
+        title: '夏令營 D2：成果發表 · 感恩結業',
+        time: '08:30 - 17:00',
+        location: '高雄六龜國小活動中心',
+        desc: '家長開放日！回顧影片放映、小隊成果發表會、感恩卡片致贈，與頒發結業證書。',
+        owner: '全體服務隊志工'
+      },
+      '2026-07-08': {
+        title: '營後檢討會議 & 慶功分享會',
+        time: '14:00 - 17:00',
+        location: '東海大學朝陽辦公室',
+        desc: '各組別針對本次營隊執行過程進行優缺點回顧，檢討經費與物資核銷，分享個人心得。',
+        owner: '行政組 - 林小華'
+      }
+    };
+
+    // --- LIFE CYCLE: INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+      // 0. Initialize Google Calendar Src with user's Calendar ID if not set
+      if (localStorage.getItem(CALENDAR_SRC_KEY) === null) {
+        localStorage.setItem(CALENDAR_SRC_KEY, 'https://calendar.google.com/calendar/embed?src=7546530f254068a3fe349c2fda73c70a69338ce7c1a63f8e02582854bbf45fb0%40group.calendar.google.com&ctz=Asia%2FTaipei');
+      }
+
+      // 1. Initialize DB in localStorage if empty or outdated
+      let existingReports = [];
+      try {
+        existingReports = JSON.parse(localStorage.getItem(REPORTS_KEY)) || [];
+      } catch (e) {}
+
+      const hasOldSchema = !localStorage.getItem(REPORTS_KEY) || 
+                           existingReports.some(r => r.dept === '行政組' || r.dept === '活動組' || !r.hasOwnProperty('meetingTime'));
+
+      if (hasOldSchema) {
+        localStorage.setItem(REPORTS_KEY, JSON.stringify(mockReports));
+      }
+
+      // 2. Initialize Countdown Timer
+      initCountdown();
+
+      // 3. Render Calendar
+      selectedEventDate = getLatestOrNearestEventDate();
+      renderCalendar();
+
+
+      // 4. Render Reports & Timeline
+      renderReports();
+
+      // 6. Init Lucide Icons
+      lucide.createIcons();
+
+      // 7. Bind Mobile Navbar events
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuIcon = document.getElementById('menu-icon');
+
+      mobileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          menuIcon.setAttribute('data-lucide', 'x');
+        } else {
+          mobileMenu.classList.add('hidden');
+          menuIcon.setAttribute('data-lucide', 'menu');
+        }
+        lucide.createIcons();
+      });
+
+      // Close mobile menu on link click
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          menuIcon.setAttribute('data-lucide', 'menu');
+          lucide.createIcons();
+        });
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.classList.contains('hidden') && !e.target.closest('nav')) {
+          mobileMenu.classList.add('hidden');
+          menuIcon.setAttribute('data-lucide', 'menu');
+          lucide.createIcons();
+        }
+      });
+
+      // Click outside modal to close
+      const settingsModal = document.getElementById('calendar-settings-modal');
+      const modalPanel = document.getElementById('settings-modal-panel');
+      if (settingsModal && modalPanel) {
+        settingsModal.addEventListener('click', (e) => {
+          if (!modalPanel.contains(e.target)) {
+            closeCalendarSettings();
+          }
+        });
+      }
+
+      // Pre-fill local current date-time in the meeting time field
+      const reportTimeInput = document.getElementById('report-time');
+      if (reportTimeInput) {
+        const now = new Date();
+        const tzoffset = now.getTimezoneOffset() * 60000;
+        const localISOTime = (new Date(now - tzoffset)).toISOString().slice(0, 16);
+        reportTimeInput.value = localISOTime;
+      }
+    });
+
+    // --- STATE VARIABLES ---
+    let currentReportFilter = 'all';
+
+    function filterTimeline(filterVal) {
+      currentReportFilter = filterVal;
+      
+      // Update button visual styles
+      const filters = {
+        'all': 'filter-btn-all',
+        '運營本部': 'filter-btn-hq',
+        '東海夢想&隊輔組': 'filter-btn-tunghai',
+        '朝陽勇氣&隊輔組': 'filter-btn-chaoyang'
+      };
+
+      Object.keys(filters).forEach(key => {
+        const btn = document.getElementById(filters[key]);
+        if (!btn) return;
+        if (key === filterVal) {
+          btn.className = "px-3.5 py-1.5 text-xs font-bold rounded-full bg-slate-800 text-white border border-slate-800 transition-all shrink-0 shadow-sm shadow-slate-200";
+        } else {
+          btn.className = "px-3.5 py-1.5 text-xs font-bold rounded-full bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 transition-all shrink-0";
+        }
+      });
+
+      renderReports();
+    }
+
+    // --- SYSTEMS RESET ACTION ---
+    function resetSystemData() {
+      if (confirm('🚨 確定要重置所有資料庫？\n此動作將會清除所有您的自訂 Google 行事曆設定及運營回報日誌，並恢復為初始系統展示資料。')) {
+        localStorage.removeItem(CALENDAR_SRC_KEY);
+        localStorage.setItem(REPORTS_KEY, JSON.stringify(mockReports));
+        
+        selectedEventDate = getLatestOrNearestEventDate();
+        currentReportFilter = 'all';
+
+        // Clear input values
+        document.getElementById('calendar-input').value = '';
+        document.getElementById('progress-report-form').reset();
+        
+        // Re-prefill current time
+        const reportTimeInput = document.getElementById('report-time');
+        if (reportTimeInput) {
+          const now = new Date();
+          const tzoffset = now.getTimezoneOffset() * 60000;
+          const localISOTime = (new Date(now - tzoffset)).toISOString().slice(0, 16);
+          reportTimeInput.value = localISOTime;
+        }
+
+        document.getElementById('report-file-name').textContent = '點選或拖曳檔案上傳';
+        document.getElementById('report-file-name').classList.remove('text-slate-700', 'font-extrabold');
+
+        // Reset filter bar styles
+        filterTimeline('all');
+
+        // Reload views
+        renderCalendar();
+        renderReports();
+        lucide.createIcons();
+        
+        alert('系統資料已重置為初始展示狀態！');
+      }
+    }
+
+    // --- MODAL CONTROLS ---
+    function openCalendarSettings() {
+      const modal = document.getElementById('calendar-settings-modal');
+      const panel = document.getElementById('settings-modal-panel');
+      const input = document.getElementById('calendar-input');
+      const customSrc = localStorage.getItem(CALENDAR_SRC_KEY);
+      
+      // Populate text area with current source if not offline
+      if (customSrc && customSrc !== 'offline') {
+        input.value = customSrc;
+      } else {
+        input.value = '';
+      }
+
+      modal.classList.remove('hidden');
+      // Apply transition animations
+      setTimeout(() => {
+        modal.classList.add('bg-slate-900/60');
+        panel.classList.remove('scale-95');
+        panel.classList.add('scale-100');
+      }, 10);
+      lucide.createIcons();
+    }
+
+    function closeCalendarSettings() {
+      const modal = document.getElementById('calendar-settings-modal');
+      const panel = document.getElementById('settings-modal-panel');
+      
+      if (panel) {
+        panel.classList.remove('scale-100');
+        panel.classList.add('scale-95');
+      }
+      if (modal) {
+        modal.classList.remove('bg-slate-900/60');
+      }
+      
+      setTimeout(() => {
+        if (modal) modal.classList.add('hidden');
+      }, 150);
+    }
+
+    // --- COUNTDOWN TIMER ---
+    function initCountdown() {
+      // Soka Camp Opening: 2026-07-03 08:30:00
+      const targetDate = new Date('2026-07-03T08:30:00+08:00').getTime();
+
+      function updateTimer() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+          document.getElementById('countdown-container').innerHTML = `
+            <div class="col-span-4 bg-emerald-500 text-white font-extrabold py-3.5 rounded-2xl animate-pulse text-center">
+              🎉 2026 創價歡樂夏令營已正式開營！
+            </div>
+          `;
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('cd-mins').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('cd-secs').textContent = String(seconds).padStart(2, '0');
+      }
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    // --- FILE UPLOADER UTILITY (SIMULATED) ---
+    function triggerFileSelect(inputId) {
+      document.getElementById(inputId).click();
+    }
+
+    function handleFileSelected(event, labelId) {
+      const file = event.target.files[0];
+      if (file) {
+        // Show file name and truncated size
+        const sizeKB = Math.round(file.size / 1024);
+        const sizeStr = sizeKB > 1000 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB} KB`;
+        document.getElementById(labelId).textContent = `已選取：${file.name} (${sizeStr})`;
+        document.getElementById(labelId).classList.add('text-slate-700', 'font-extrabold');
+      }
+    }
+
+    // ==================== FEATURE 1: GOOGLE CALENDAR LOGIC ====================
+    function getLatestOrNearestEventDate() {
+      const todayStr = new Date().toISOString().split('T')[0]; // e.g. "2026-05-23"
+      const eventDates = Object.keys(localEvents).sort();
+      for (const d of eventDates) {
+        if (d >= todayStr) {
+          return d;
+        }
+      }
+      return eventDates[eventDates.length - 1] || '2026-07-03';
+    }
+
+    function getGoogleCalendarMonthUrl(customSrc) {
+      try {
+        const url = new URL(customSrc);
+        if (!url.searchParams.has('dates')) {
+          url.searchParams.set('dates', '20260701/20260731');
+        }
+        url.searchParams.set('hl', 'zh_TW');
+        return url.toString();
+      } catch (e) {
+        let urlStr = customSrc;
+        if (!urlStr.includes('dates=')) {
+          const divider = urlStr.includes('?') ? '&' : '?';
+          urlStr = urlStr + divider + 'dates=20260701/20260731';
+        }
+        if (!urlStr.includes('hl=')) {
+          const divider = urlStr.includes('?') ? '&' : '?';
+          urlStr = urlStr + divider + 'hl=zh_TW';
+        }
+        return urlStr;
+      }
+    }
+
+    function renderCalendar() {
+      const container = document.getElementById('calendar-container');
+      const customSrc = localStorage.getItem(CALENDAR_SRC_KEY);
+      const calStatusText = document.getElementById('cal-status-text');
+      const calResetBtn = document.getElementById('cal-reset-btn');
+
+      if (customSrc && customSrc !== 'offline') {
+        // 1. Google Calendar Connected Mode
+        if (calStatusText) calStatusText.textContent = '已串接 Google 行事曆';
+        if (calResetBtn) calResetBtn.classList.remove('hidden');
+
+        container.innerHTML = `
+          <div class="relative w-full h-full min-h-[460px] bg-slate-50 flex flex-col justify-between">
+            <div class="bg-slate-100 px-4 py-3 border-b border-slate-200 flex justify-between items-center text-xs">
+              <span class="font-bold text-slate-500 flex items-center">
+                <span class="inline-block w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-ping"></span>
+                已連接 GOOGLE 行事曆
+              </span>
+              <div class="flex items-center space-x-2">
+                <button onclick="openCalendarSettings()" class="inline-flex items-center py-1 px-2.5 rounded bg-white hover:bg-slate-50 text-slate-600 hover:text-camp-sky border border-slate-200 transition-all font-bold">
+                  <i data-lucide="settings" class="w-3.5 h-3.5 mr-1"></i>
+                  <span>設定日曆</span>
+                </button>
+                <a href="${customSrc}" target="_blank" class="text-camp-sky font-bold hover:underline flex items-center bg-white px-2.5 py-1 rounded border border-slate-200 hover:bg-slate-50">
+                  新分頁開啟 <i data-lucide="external-link" class="w-3 h-3 ml-1"></i>
+                </a>
+              </div>
+            </div>
+            <!-- Monthly View for Desktop -->
+            <iframe src="${getGoogleCalendarMonthUrl(customSrc)}" style="border: 0" class="w-full flex-grow h-[440px] hidden lg:block" frameborder="0" scrolling="no"></iframe>
+            <!-- Agenda View for Mobile -->
+            <iframe src="${getGoogleCalendarAgendaUrl(customSrc)}" style="border: 0" class="w-full flex-grow h-[440px] lg:hidden" frameborder="0" scrolling="no"></iframe>
+          </div>
+        `;
+      } else {
+        // 2. Local Fallback Calendar Mode
+        if (calStatusText) calStatusText.textContent = '使用本機預設日曆';
+        if (calResetBtn) calResetBtn.classList.add('hidden');
+
+        const ev = localEvents[selectedEventDate];
+        const [year, month, day] = selectedEventDate.split('-');
+        const dateObj = new Date(selectedEventDate);
+        const daysOfWeekNames = ['日', '一', '二', '三', '四', '五', '六'];
+        const dayName = daysOfWeekNames[dateObj.getDay()];
+        const fullDisplayDate = `${month}月${day}日 (週${dayName})`;
+
+        // Build inline details HTML for Mobile (lg:hidden)
+        let inlineDetailsHTML = '';
+        if (ev) {
+          inlineDetailsHTML = `
+            <div class="mt-6 bg-gradient-to-br from-indigo-50 to-sky-50 border border-indigo-100 rounded-2xl p-4.5 space-y-3 shadow-sm lg:hidden animate-fade-in">
+              <div class="flex items-center justify-between">
+                <span class="bg-indigo-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">焦點日程</span>
+                <span class="text-xs font-extrabold text-indigo-700">${fullDisplayDate}</span>
+              </div>
+              
+              <h4 class="text-base font-black text-slate-800 leading-snug">${ev.title}</h4>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-600 font-bold">
+                <div class="flex items-center space-x-1.5">
+                  <i data-lucide="clock" class="w-4 h-4 text-indigo-500 shrink-0"></i>
+                  <span>時間：${ev.time}</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                  <i data-lucide="map-pin" class="w-4 h-4 text-rose-500 shrink-0"></i>
+                  <span>地點：${ev.location}</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                  <i data-lucide="user" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                  <span>負責：${ev.owner}</span>
+                </div>
+              </div>
+              
+              <div class="pt-2.5 border-t border-slate-200/60">
+                <p class="text-xs text-slate-600 font-medium leading-relaxed">${ev.desc}</p>
+              </div>
+            </div>
+          `;
+        } else {
+          inlineDetailsHTML = `
+            <div class="mt-6 bg-slate-50 border border-slate-200/80 rounded-2xl p-4.5 text-center text-slate-400 lg:hidden">
+              <i data-lucide="calendar-range" class="w-6 h-6 mx-auto mb-1.5 text-slate-300"></i>
+              <p class="text-xs font-bold">${month}月${day}日 尚無特定日程安排</p>
+            </div>
+          `;
+        }
+
+        // Build inline milestones switcher for Mobile (lg:hidden)
+        let inlineMilestonesHTML = '';
+        Object.keys(localEvents).sort().forEach(dateStr => {
+          const item = localEvents[dateStr];
+          const isActive = selectedEventDate === dateStr;
+          const [_, m, d] = dateStr.split('-');
+          
+          let activeClass = isActive 
+            ? 'bg-indigo-600 text-white shadow-md shadow-indigo-100 font-extrabold border-indigo-600' 
+            : 'bg-white hover:bg-slate-50 text-slate-700 font-semibold border-slate-100 hover:border-slate-200';
+
+          inlineMilestonesHTML += `
+            <button onclick="selectSidebarDate('${dateStr}')" class="w-full text-left p-3 rounded-xl border transition-all text-xs flex items-center justify-between gap-3 ${activeClass}">
+              <div class="flex items-center space-x-2 truncate">
+                <span class="shrink-0 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${isActive ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'}">
+                  ${m}/${d}
+                </span>
+                <span class="truncate">${item.title}</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}"></i>
+            </button>
+          `;
+        });
+
+        container.innerHTML = `
+          <div class="p-4 sm:p-6 flex flex-col h-full justify-between animate-fade-in">
+            <!-- Calendar Navigation Header -->
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="calendar" class="w-5 h-5 text-camp-sky"></i>
+                <h3 class="text-base sm:text-lg font-black text-slate-800">活動日程預覽 (2026年7月)</h3>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button onclick="openCalendarSettings()" class="inline-flex items-center py-1.5 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-camp-sky bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 transition-all">
+                  <i data-lucide="settings" class="w-3.5 h-3.5 mr-1"></i>
+                  <span>串接日曆</span>
+                </button>
+                <span class="text-xs bg-slate-100 font-extrabold text-slate-500 py-1.5 px-3 rounded-full border border-slate-200 hidden sm:inline-block">
+                  本機離線模式
+                </span>
+              </div>
+            </div>
+
+            <!-- Calendar Month Grid -->
+            <div class="grid grid-cols-7 gap-1 text-center font-bold text-[10px] sm:text-xs text-slate-400 mb-2 uppercase tracking-widest">
+              <div class="text-rose-500">日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div class="text-sky-500">六</div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-1.5 sm:gap-2 text-center text-xs sm:text-sm font-semibold select-none">
+              <!-- June Muted End Days (June 28-30) -->
+              <div class="bg-slate-50 p-1.5 sm:p-2.5 rounded-xl text-slate-300 border border-slate-100/50 flex flex-col justify-between min-h-[36px] sm:min-h-[48px]">
+                <span>28</span>
+              </div>
+              <div class="bg-slate-50 p-1.5 sm:p-2.5 rounded-xl text-slate-300 border border-slate-100/50 flex flex-col justify-between min-h-[36px] sm:min-h-[48px]">
+                <span>29</span>
+              </div>
+              <div class="bg-slate-50 p-1.5 sm:p-2.5 rounded-xl text-slate-300 border border-slate-100/50 flex flex-col justify-between min-h-[36px] sm:min-h-[48px]">
+                <span>30</span>
+              </div>
+
+              <!-- July Days -->
+              ${generateJulyCalendarHTML()}
+            </div>
+
+            <!-- Mobile-only inline details -->
+            ${inlineDetailsHTML}
+
+            <!-- Mobile-only inline milestones switcher -->
+            <div class="space-y-2 mt-6 lg:hidden">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">營隊核心里程碑</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1">
+                ${inlineMilestonesHTML}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      renderCalendarSidebar();
+      lucide.createIcons();
+    }
+
+    // Helper to generate the monthly layout for July 2026 (Wednesday starts D1, 31 days)
+    function generateJulyCalendarHTML() {
+      let html = '';
+      for (let day = 1; day <= 31; day++) {
+        const dateStr = `2026-07-${String(day).padStart(2, '0')}`;
+        const hasEvent = localEvents[dateStr] !== undefined;
+        const isSelected = selectedEventDate === dateStr;
+
+        let dayClass = 'bg-white hover:bg-slate-100 border border-slate-100 rounded-xl cursor-pointer p-1 sm:p-2 text-slate-700 transition-all ';
+        let eventDot = '';
+
+        if (hasEvent) {
+          dayClass += 'ring-2 ring-indigo-100 border-indigo-200 ';
+          if (isSelected) {
+            dayClass += 'bg-gradient-to-br from-indigo-500 to-camp-sky text-white font-extrabold shadow-md shadow-indigo-100 scale-105';
+            eventDot = '<span class="block w-1.5 h-1.5 bg-white rounded-full mx-auto mt-1"></span>';
+          } else {
+            dayClass += 'bg-indigo-50 font-bold text-indigo-800 hover:bg-indigo-100';
+            eventDot = '<span class="block w-1.5 h-1.5 bg-indigo-500 rounded-full mx-auto mt-1 animate-pulse"></span>';
+          }
+        } else {
+          if (isSelected) {
+            dayClass += 'bg-slate-800 text-white font-extrabold scale-105 shadow-sm';
+          }
+        }
+
+        // Sunday and Saturday colors
+        // July 2026: Sun is 5, 12, 19, 26. Sat is 4, 11, 18, 25.
+        // We offset by 3 days because start is Wed. Day 1 is Wed (idx 3).
+        const dayOfWeek = (day + 2) % 7; 
+        let weekColor = '';
+        if (!isSelected) {
+          if (dayOfWeek === 0) weekColor = 'text-rose-500 ';
+          if (dayOfWeek === 6) weekColor = 'text-sky-500 ';
+        }
+
+        html += `
+          <div onclick="selectCalendarDate('${dateStr}')" class="${dayClass} ${weekColor} relative flex flex-col justify-between min-h-[36px] sm:min-h-[48px]">
+            <span>${day}</span>
+            ${eventDot}
+          </div>
+        `;
+      }
+
+      // Add August Muted Start Days (August 1)
+      html += `
+        <div class="bg-slate-50 p-1.5 sm:p-2.5 rounded-xl text-slate-300 border border-slate-100/50 flex flex-col justify-between min-h-[36px] sm:min-h-[48px]">
+          <span>1</span>
+        </div>
+      `;
+
+      return html;
+    }
+
+    function selectCalendarDate(dateStr) {
+      selectedEventDate = dateStr;
+      renderCalendar();
+    }
+
+    function getGoogleCalendarAgendaUrl(customSrc) {
+      try {
+        const url = new URL(customSrc);
+        url.searchParams.set('mode', 'AGENDA');
+        url.searchParams.set('showTitle', '0');
+        url.searchParams.set('showNav', '1');
+        url.searchParams.set('showDate', '1');
+        url.searchParams.set('showPrint', '0');
+        url.searchParams.set('showTabs', '0');
+        url.searchParams.set('showCalendars', '0');
+        url.searchParams.set('hl', 'zh_TW');
+        if (!url.searchParams.has('dates')) {
+          url.searchParams.set('dates', '20260701/20260731');
+        }
+        return url.toString();
+      } catch (e) {
+        let urlStr = customSrc;
+        if (!urlStr.includes('dates=')) {
+          const divider = urlStr.includes('?') ? '&' : '?';
+          urlStr = urlStr + divider + 'dates=20260701/20260731';
+        }
+        const divider = urlStr.includes('?') ? '&' : '?';
+        return urlStr + divider + 'mode=AGENDA&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&hl=zh_TW';
+      }
+    }
+
+    function renderCalendarSidebar() {
+      const sidebar = document.getElementById('calendar-sidebar-container');
+      if (!sidebar) return;
+
+      const customSrc = localStorage.getItem(CALENDAR_SRC_KEY);
+      const isGoogleConnected = customSrc && customSrc !== 'offline';
+
+      if (isGoogleConnected) {
+        sidebar.className = "lg:col-span-4 bg-white rounded-3xl p-6 border border-slate-200/60 shadow-lg flex flex-col justify-between hidden lg:flex";
+        sidebar.innerHTML = `
+          <div class="space-y-4 h-full flex flex-col justify-between">
+            <!-- Sidebar Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
+              <div class="flex items-center space-x-2">
+                <div class="p-2 bg-indigo-50 rounded-xl text-indigo-600">
+                  <i data-lucide="compass" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-black text-slate-800">最新行事曆日程與說明</h3>
+                  <p class="text-[10px] text-slate-400 font-bold">即時同步 Google 日曆事件列表</p>
+                </div>
+              </div>
+              <span class="text-[9px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full border border-emerald-100 font-bold shrink-0">已同步 Google</span>
+            </div>
+            
+            <!-- Agenda Iframe Container -->
+            <div class="flex-grow w-full border border-slate-200/60 rounded-2xl overflow-hidden shadow-inner bg-slate-50 relative flex flex-col" style="min-h-[380px]">
+              <iframe src="${getGoogleCalendarAgendaUrl(customSrc)}" style="border: 0" class="w-full flex-grow h-full" frameborder="0" scrolling="no"></iframe>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      sidebar.className = "lg:col-span-4 bg-white rounded-3xl p-6 border border-slate-200/60 shadow-lg flex flex-col justify-between hidden lg:flex";
+      const ev = localEvents[selectedEventDate];
+      const [year, month, day] = selectedEventDate.split('-');
+      const displayDate = `${month}/${day}`;
+
+      // Format full display date with day of week
+      const dateObj = new Date(selectedEventDate);
+      const daysOfWeekNames = ['日', '一', '二', '三', '四', '五', '六'];
+      const dayName = daysOfWeekNames[dateObj.getDay()];
+      const fullDisplayDate = `${month}月${day}日 (週${dayName})`;
+
+      // 1. Render active event details
+      let detailsHTML = '';
+      if (ev) {
+        detailsHTML = `
+          <div class="bg-gradient-to-br from-indigo-50 to-sky-50 border border-indigo-100 rounded-2xl p-5 space-y-4 shadow-sm animate-fade-in">
+            <div class="flex items-center justify-between">
+              <span class="bg-indigo-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">焦點日程</span>
+              <span class="text-xs font-extrabold text-indigo-700">${fullDisplayDate}</span>
+            </div>
+            
+            <h4 class="text-lg font-black text-slate-800 leading-snug">${ev.title}</h4>
+            
+            <div class="space-y-2.5 text-xs text-slate-600 font-bold">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="clock" class="w-4 h-4 text-indigo-500 shrink-0"></i>
+                <span>時間：${ev.time}</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <i data-lucide="map-pin" class="w-4 h-4 text-rose-500 shrink-0"></i>
+                <span>地點：${ev.location}</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <i data-lucide="user" class="w-4 h-4 text-emerald-500 shrink-0"></i>
+                <span>負責：${ev.owner}</span>
+              </div>
+            </div>
+            
+            <div class="pt-3.5 border-t border-slate-200/60">
+              <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${ev.desc}</p>
+            </div>
+          </div>
+        `;
+      } else {
+        detailsHTML = `
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 text-center text-slate-400">
+            <i data-lucide="calendar-range" class="w-8 h-8 mx-auto mb-2 text-slate-300 animate-pulse"></i>
+            <p class="text-xs font-bold">${month}月${day}日 尚無特定日程安排</p>
+            <p class="text-[10px] text-slate-400 mt-1">請點選下方核心里程碑或日曆中圈點日期。</p>
+          </div>
+        `;
+      }
+
+      // 2. Render milestones selector list
+      let milestonesHTML = '';
+      Object.keys(localEvents).sort().forEach(dateStr => {
+        const item = localEvents[dateStr];
+        const isActive = selectedEventDate === dateStr;
+        const [_, m, d] = dateStr.split('-');
+        
+        let activeClass = isActive 
+          ? 'bg-indigo-600 text-white shadow-md shadow-indigo-100 font-extrabold border-indigo-600' 
+          : 'bg-white hover:bg-slate-50 text-slate-700 font-semibold border-slate-100 hover:border-slate-200';
+
+        milestonesHTML += `
+          <button onclick="selectSidebarDate('${dateStr}')" class="w-full text-left p-3 rounded-xl border transition-all text-xs flex items-center justify-between gap-3 ${activeClass}">
+            <div class="flex items-center space-x-2.5 truncate">
+              <span class="shrink-0 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${isActive ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-500'}">
+                ${m}/${d}
+              </span>
+              <span class="truncate">${item.title}</span>
+            </div>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}"></i>
+          </button>
+        `;
+      });
+
+      // 3. Assemble Sidebar
+      sidebar.innerHTML = `
+        <div class="space-y-5 flex-grow flex flex-col justify-between">
+          <div class="space-y-4">
+            <!-- Sidebar Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center space-x-2">
+                <div class="p-2 bg-indigo-50 rounded-xl text-indigo-600">
+                  <i data-lucide="compass" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-black text-slate-800">最新日程與詳細說明</h3>
+                  <p class="text-[10px] text-slate-400 font-bold">即時同步點選的日期項目</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Dynamic Details Box -->
+            ${detailsHTML}
+          </div>
+
+          <!-- Milestones Switcher -->
+          <div class="space-y-2 mt-4">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">營隊核心里程碑</span>
+            </div>
+            <div class="space-y-2 overflow-y-auto max-h-[180px] pr-1 scrollbar-thin">
+              ${milestonesHTML}
+            </div>
+          </div>
+        </div>
+      `;
+
+      lucide.createIcons();
+    }
+
+    function selectSidebarDate(dateStr) {
+      selectedEventDate = dateStr;
+      renderCalendar();
+    }
+
+    // --- FORM ACTION: SAVE GOOGLE CALENDAR IFRAME SRC ---
+    function saveCalendarSrc(event) {
+      event.preventDefault();
+      const rawInput = document.getElementById('calendar-input').value.trim();
+
+      if (!rawInput) {
+        alert('請輸入有效 Google 日曆 ID 或嵌入 HTML。');
+        return;
+      }
+
+      let embedSrc = '';
+
+      // Check if user pasted an iframe
+      if (rawInput.includes('<iframe') && rawInput.includes('src=')) {
+        // Extract the src attribute using regex
+        const match = rawInput.match(/src=["']([^"']+)["']/);
+        if (match && match[1]) {
+          embedSrc = match[1];
+        }
+      } else if (rawInput.startsWith('http://') || rawInput.startsWith('https://')) {
+        embedSrc = rawInput;
+      } else {
+        // Treat as plain Calendar ID, build standard Taiwan timezone URL
+        embedSrc = `https://calendar.google.com/calendar/embed?src=${encodeURIComponent(rawInput)}&ctz=Asia%2FTaipei`;
+      }
+
+      if (embedSrc) {
+        localStorage.setItem(CALENDAR_SRC_KEY, embedSrc);
+        renderCalendar();
+        alert('Google 行事曆連結儲存成功，已成功串接！');
+      } else {
+        alert('無法解析輸入的網址，請確認日曆 ID 或 iframe 格式是否正確。');
+      }
+    }
+
+    function clearCalendarSrc() {
+      if (confirm('是否確認清除自訂的 Google 行事曆連結？日曆將切換回本機離線模式。')) {
+        localStorage.setItem(CALENDAR_SRC_KEY, 'offline');
+        document.getElementById('calendar-input').value = '';
+        renderCalendar();
+      }
+    }
+
+
+    // ==================== FEATURE 2: OPERATIONS PROGRESS TRACKER ====================
+    function getReports() {
+      return JSON.parse(localStorage.getItem(REPORTS_KEY)) || [];
+    }
+
+    function renderReports() {
+      const reports = getReports();
+      const timeline = document.getElementById('progress-timeline');
+      const emptyState = document.getElementById('timeline-empty-state');
+      const listCounter = document.getElementById('report-list-counter');
+
+      // Group summaries to calculate averages (always based on ALL reports)
+      const deptSums = { '運營本部': 0, '東海夢想&隊輔組': 0, '朝陽勇氣&隊輔組': 0 };
+      const deptCounts = { '運營本部': 0, '東海夢想&隊輔組': 0, '朝陽勇氣&隊輔組': 0 };
+
+      // Pre-fill default in case no reports for the dept to keep display realistic
+      const defaultAverages = { '運營本部': 90, '東海夢想&隊輔組': 80, '朝陽勇氣&隊輔組': 85 };
+
+      reports.forEach(r => {
+        if (deptSums[r.dept] !== undefined) {
+          deptSums[r.dept] += Number(r.progress);
+          deptCounts[r.dept] += 1;
+        }
+      });
+
+      // Calculate Averages & update UI widgets
+      let totalSum = 0;
+      let totalCount = 0;
+
+      Object.keys(deptSums).forEach(dept => {
+        const hasData = deptCounts[dept] > 0;
+        const avg = hasData ? Math.round(deptSums[dept] / deptCounts[dept]) : defaultAverages[dept];
+        totalSum += avg;
+        totalCount += 1;
+
+        let deptId = '';
+        if (dept === '運營本部') deptId = 'dept-hq-progress';
+        if (dept === '東海夢想&隊輔組') deptId = 'dept-tunghai-progress';
+        if (dept === '朝陽勇氣&隊輔組') deptId = 'dept-chaoyang-progress';
+
+        const deptEl = document.getElementById(deptId);
+        if (deptEl) deptEl.textContent = `${avg}%`;
+      });
+
+      // Overall progress average
+      const overallAvg = totalCount > 0 ? Math.round(totalSum / totalCount) : 75;
+      const heroProgressVal = document.getElementById('hero-progress-val');
+      if (heroProgressVal) heroProgressVal.textContent = `${overallAvg}%`;
+
+      // Filter reports by current department filter for the timeline display
+      let filteredReports = reports;
+      if (currentReportFilter !== 'all') {
+        filteredReports = reports.filter(r => r.dept === currentReportFilter);
+      }
+
+      // Update counters based on filtered list
+      listCounter.textContent = `${filteredReports.length} 筆記錄`;
+      const heroReportCount = document.getElementById('hero-report-count');
+      if (heroReportCount) heroReportCount.textContent = reports.length; // Keep global count in hero
+
+      // Clear timeline HTML
+      timeline.innerHTML = '';
+
+      if (filteredReports.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      // Populate Timeline Feed
+      filteredReports.forEach((r) => {
+        const item = document.createElement('div');
+        item.className = 'relative pl-6 sm:pl-10 group transition-all hover:translate-x-1 duration-200';
+
+        // Set department marker dot colors
+        let dotColor = 'bg-slate-300';
+        if (r.dept === '運營本部') dotColor = 'bg-camp-sky ring-sky-100';
+        if (r.dept === '東海夢想&隊輔組') dotColor = 'bg-camp-orange ring-orange-100';
+        if (r.dept === '朝陽勇氣&隊輔組') dotColor = 'bg-camp-teal ring-teal-100';
+
+        // Format Meeting Time
+        const meetingTimeFormatted = r.meetingTime ? new Date(r.meetingTime).toLocaleString('zh-TW', {
+          month: 'numeric',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }) : '未記錄';
+
+        // Format Submission Date
+        const dateFormatted = new Date(r.timestamp).toLocaleString('zh-TW', {
+          month: 'numeric',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        // Check if there is an attachment
+        let fileHTML = '';
+        if (r.fileName) {
+          fileHTML = `
+            <div class="mt-3.5 inline-flex items-center space-x-2 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-lg py-1.5 px-3 text-xs text-slate-500 font-bold transition-all" title="模擬點選下載">
+              <i data-lucide="paperclip" class="w-3.5 h-3.5 text-slate-400"></i>
+              <span class="hover:underline cursor-pointer">${r.fileName}</span>
+            </div>
+          `;
+        }
+
+        item.innerHTML = `
+          <!-- Timeline Circle Indicator -->
+          <div class="absolute -left-[7px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-white ring-4 ${dotColor}"></div>
+          
+          <!-- Content Box -->
+          <div class="bg-white border border-slate-200/70 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all">
+            <div class="flex items-start justify-between gap-4">
+              <div class="space-y-3 flex-grow">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-0.5 rounded border border-slate-200 font-extrabold">${r.dept}</span>
+                  <span class="text-xs bg-orange-50 text-camp-orange px-2 py-0.5 rounded border border-orange-100 font-bold flex items-center">
+                    <i data-lucide="calendar" class="w-3 h-3 mr-1"></i> 會議：${meetingTimeFormatted}
+                  </span>
+                  <span class="text-[10px] text-slate-400 font-bold font-mono">(發布於 ${dateFormatted})</span>
+                </div>
+
+                <div class="text-xs sm:text-sm space-y-2.5 text-slate-600 font-medium">
+                  <div class="flex items-center space-x-1.5 text-slate-700">
+                    <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+                    <span class="font-extrabold text-xs">參與及記錄人員：</span>
+                    <span class="text-xs font-semibold bg-slate-50 px-2 py-0.5 rounded border border-slate-100">${r.attendees || '未填寫'}</span>
+                  </div>
+
+                  <div class="border-t border-slate-100 pt-2">
+                    <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
+                      <i data-lucide="check-square" class="w-3.5 h-3.5 mr-1 text-camp-orange"></i> 1. 運營項目與進度
+                    </span>
+                    <p class="pl-4.5 text-slate-600 whitespace-pre-line">${r.content}</p>
+                  </div>
+
+                  <div class="border-t border-slate-100 pt-2">
+                    <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
+                      <i data-lucide="clock" class="w-3.5 h-3.5 mr-1 text-amber-500"></i> 2. 待完成項目
+                    </span>
+                    <p class="pl-4.5 text-slate-500 whitespace-pre-line">${r.pendingItems || '無'}</p>
+                  </div>
+
+                  ${r.other ? `
+                  <div class="border-t border-slate-100 pt-2">
+                    <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
+                      <i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400"></i> 3. 其他備註說明
+                    </span>
+                    <p class="pl-4.5 text-slate-500 italic whitespace-pre-line">${r.other}</p>
+                  </div>
+                  ` : ''}
+                </div>
+                ${fileHTML}
+              </div>
+
+              <!-- Metrics indicator -->
+              <div class="text-right shrink-0 flex flex-col items-end space-y-2">
+                <div class="flex flex-col items-center justify-center w-11 h-11 rounded-full bg-slate-50 border border-slate-100">
+                  <span class="text-xs font-black text-slate-800 leading-none">${r.progress}%</span>
+                  <span class="text-[7px] text-slate-400 font-extrabold mt-0.5 uppercase">整體進度</span>
+                </div>
+                
+                <!-- Delete Button -->
+                <button onclick="deleteReport('${r.id}')" class="opacity-0 group-hover:opacity-100 p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg border border-transparent hover:border-rose-100 transition-all" title="刪除記錄">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        timeline.appendChild(item);
+      });
+
+      lucide.createIcons();
+    }
+
+    // --- FORM ACTION: SUBMIT OP REPORT ---
+    function submitProgressReport(event) {
+      event.preventDefault();
+      
+      const dept = document.getElementById('report-dept').value;
+      const meetingTime = document.getElementById('report-time').value;
+      const attendees = document.getElementById('report-attendees').value.trim();
+      const progress = Math.min(100, Math.max(0, Number(document.getElementById('report-progress').value)));
+      const content = document.getElementById('report-content').value.trim();
+      const pendingItems = document.getElementById('report-pending').value.trim();
+      const other = document.getElementById('report-other').value.trim();
+      
+      // Simulate file upload name
+      const fileInput = document.getElementById('report-file');
+      let fileName = '';
+      if (fileInput.files.length > 0) {
+        fileName = fileInput.files[0].name;
+      }
+
+      const newReport = {
+        id: 'rep-' + Date.now(),
+        dept,
+        meetingTime,
+        attendees,
+        progress,
+        content,
+        pendingItems,
+        other,
+        fileName,
+        timestamp: new Date().toISOString()
+      };
+
+      const list = getReports();
+      list.unshift(newReport); // Add to top
+      localStorage.setItem(REPORTS_KEY, JSON.stringify(list));
+
+      // Reset form
+      document.getElementById('progress-report-form').reset();
+      
+      // Re-prefill current time
+      const reportTimeInput = document.getElementById('report-time');
+      if (reportTimeInput) {
+        const now = new Date();
+        const tzoffset = now.getTimezoneOffset() * 60000;
+        const localISOTime = (new Date(now - tzoffset)).toISOString().slice(0, 16);
+        reportTimeInput.value = localISOTime;
+      }
+
+      document.getElementById('report-file-name').textContent = '點選或拖曳檔案上傳';
+      document.getElementById('report-file-name').classList.remove('text-slate-700', 'font-extrabold');
+
+      renderReports();
+      alert('會議與進度記錄已成功發布並更新統計數據！');
+    }
+
+    function deleteReport(id) {
+      if (!confirm('您確定要刪除這筆會議與進度記錄嗎？')) return;
+
+      const list = getReports();
+      const updated = list.filter(item => item.id !== id);
+      localStorage.setItem(REPORTS_KEY, JSON.stringify(updated));
+      renderReports();
+    }
+
+  </script>
+</body>
+</html>

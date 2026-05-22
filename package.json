@@ -1,0 +1,16 @@
+{
+  "name": "soka-camp-portal",
+  "version": "1.0.0",
+  "description": "2026 創價歡樂夏令營 運營本部管理平台",
+  "main": "index.html",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "soka",
+    "camp",
+    "portal"
+  ],
+  "author": "Antigravity",
+  "license": "ISC"
+}
