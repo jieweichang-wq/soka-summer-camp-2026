@@ -485,7 +485,7 @@
                 <span class="text-indigo-700 font-bold flex items-center">
                   <i data-lucide="target" class="w-4 h-4 mr-1"></i> 目標題目數
                 </span>
-                <span class="text-slate-800 font-black" id="daimoku-target-val">500,000 遍</span>
+                <span class="text-slate-800 font-black" id="daimoku-target-val">2,000,000 遍</span>
               </div>
             </div>
           </div>
@@ -1949,7 +1949,7 @@
 
     // --- FEATURE 3: DAIMOKU TRACKER STATE ---
     let daimokuLogs = [];
-    let daimokuTarget = Number(localStorage.getItem('soka_camp_daimoku_target')) || 500000;
+    let daimokuTarget = Number(localStorage.getItem('soka_camp_daimoku_target')) || 2000000;
 
     async function loadDaimokuLogs() {
       if (GOOGLE_SCRIPT_API_URL) {
