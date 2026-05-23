@@ -552,6 +552,8 @@
     // --- GLOBAL CONSTANTS & STORAGE KEYS ---
     const CALENDAR_SRC_KEY = 'soka_camp_calendar_src';
     const REPORTS_KEY = 'soka_camp_reports_v1';
+    const GOOGLE_SCRIPT_API_URL = ''; // Paste your Google Web App URL here
+    let reportsCached = [];
 
     // --- MOCK DATABASE STATE ---
     const mockReports = [
@@ -664,7 +666,9 @@
 
 
       // 4. Render Reports & Timeline
-      renderReports();
+      loadReports().then(() => {
+        renderReports();
+      });
 
       // 6. Init Lucide Icons
       lucide.createIcons();
@@ -783,8 +787,10 @@
 
         // Reload views
         renderCalendar();
-        renderReports();
-        lucide.createIcons();
+        loadReports().then(() => {
+          filterTimeline('all');
+          lucide.createIcons();
+        });
         
         alert('系統資料已重置為初始展示狀態！');
       }
@@ -1367,8 +1373,33 @@
 
 
     // ==================== FEATURE 2: OPERATIONS PROGRESS TRACKER ====================
+    async function loadReports() {
+      if (GOOGLE_SCRIPT_API_URL) {
+        try {
+          const res = await fetch(GOOGLE_SCRIPT_API_URL);
+          const data = await res.json();
+          data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          reportsCached = data;
+          localStorage.setItem(REPORTS_KEY, JSON.stringify(data));
+        } catch (e) {
+          console.error("Failed to fetch reports from Google Sheets, using LocalStorage fallback:", e);
+          reportsCached = JSON.parse(localStorage.getItem(REPORTS_KEY)) || mockReports;
+        }
+      } else {
+        let localData = [];
+        try {
+          localData = JSON.parse(localStorage.getItem(REPORTS_KEY)) || [];
+        } catch (e) {}
+        if (localData.length === 0) {
+          localData = mockReports;
+          localStorage.setItem(REPORTS_KEY, JSON.stringify(mockReports));
+        }
+        reportsCached = localData;
+      }
+    }
+
     function getReports() {
-      return JSON.parse(localStorage.getItem(REPORTS_KEY)) || [];
+      return reportsCached;
     }
 
     function renderReports() {
@@ -1377,11 +1408,8 @@
       const emptyState = document.getElementById('timeline-empty-state');
       const listCounter = document.getElementById('report-list-counter');
 
-      // Group summaries to calculate averages (always based on ALL reports)
       const deptSums = { '運營本部': 0, '東海夢想&隊輔組': 0, '朝陽勇氣&隊輔組': 0 };
       const deptCounts = { '運營本部': 0, '東海夢想&隊輔組': 0, '朝陽勇氣&隊輔組': 0 };
-
-      // Pre-fill default in case no reports for the dept to keep display realistic
       const defaultAverages = { '運營本部': 90, '東海夢想&隊輔組': 80, '朝陽勇氣&隊輔組': 85 };
 
       reports.forEach(r => {
@@ -1391,7 +1419,6 @@
         }
       });
 
-      // Calculate Averages & update UI widgets
       let totalSum = 0;
       let totalCount = 0;
 
@@ -1410,23 +1437,19 @@
         if (deptEl) deptEl.textContent = `${avg}%`;
       });
 
-      // Overall progress average
       const overallAvg = totalCount > 0 ? Math.round(totalSum / totalCount) : 75;
       const heroProgressVal = document.getElementById('hero-progress-val');
       if (heroProgressVal) heroProgressVal.textContent = `${overallAvg}%`;
 
-      // Filter reports by current department filter for the timeline display
       let filteredReports = reports;
       if (currentReportFilter !== 'all') {
         filteredReports = reports.filter(r => r.dept === currentReportFilter);
       }
 
-      // Update counters based on filtered list
       listCounter.textContent = `${filteredReports.length} 筆記錄`;
       const heroReportCount = document.getElementById('hero-report-count');
-      if (heroReportCount) heroReportCount.textContent = reports.length; // Keep global count in hero
+      if (heroReportCount) heroReportCount.textContent = reports.length;
 
-      // Clear timeline HTML
       timeline.innerHTML = '';
 
       if (filteredReports.length === 0) {
@@ -1436,18 +1459,15 @@
         emptyState.classList.add('hidden');
       }
 
-      // Populate Timeline Feed
       filteredReports.forEach((r) => {
         const item = document.createElement('div');
         item.className = 'relative pl-6 sm:pl-10 group transition-all hover:translate-x-1 duration-200';
 
-        // Set department marker dot colors
         let dotColor = 'bg-slate-300';
         if (r.dept === '運營本部') dotColor = 'bg-camp-sky ring-sky-100';
         if (r.dept === '東海夢想&隊輔組') dotColor = 'bg-camp-orange ring-orange-100';
         if (r.dept === '朝陽勇氣&隊輔組') dotColor = 'bg-camp-teal ring-teal-100';
 
-        // Format Meeting Time
         const meetingTimeFormatted = r.meetingTime ? new Date(r.meetingTime).toLocaleString('zh-TW', {
           month: 'numeric',
           day: 'numeric',
@@ -1455,7 +1475,6 @@
           minute: '2-digit'
         }) : '未記錄';
 
-        // Format Submission Date
         const dateFormatted = new Date(r.timestamp).toLocaleString('zh-TW', {
           month: 'numeric',
           day: 'numeric',
@@ -1463,7 +1482,6 @@
           minute: '2-digit'
         });
 
-        // Check if there is an attachment
         let fileHTML = '';
         if (r.fileName) {
           fileHTML = `
@@ -1475,10 +1493,8 @@
         }
 
         item.innerHTML = `
-          <!-- Timeline Circle Indicator -->
           <div class="absolute -left-[7px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-white ring-4 ${dotColor}"></div>
           
-          <!-- Content Box -->
           <div class="bg-white border border-slate-200/70 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all">
             <div class="flex items-start justify-between gap-4">
               <div class="space-y-3 flex-grow">
@@ -1523,14 +1539,12 @@
                 ${fileHTML}
               </div>
 
-              <!-- Metrics indicator -->
               <div class="text-right shrink-0 flex flex-col items-end space-y-2">
                 <div class="flex flex-col items-center justify-center w-11 h-11 rounded-full bg-slate-50 border border-slate-100">
                   <span class="text-xs font-black text-slate-800 leading-none">${r.progress}%</span>
                   <span class="text-[7px] text-slate-400 font-extrabold mt-0.5 uppercase">整體進度</span>
                 </div>
                 
-                <!-- Delete Button -->
                 <button onclick="deleteReport('${r.id}')" class="opacity-0 group-hover:opacity-100 p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg border border-transparent hover:border-rose-100 transition-all" title="刪除記錄">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
@@ -1546,7 +1560,7 @@
     }
 
     // --- FORM ACTION: SUBMIT OP REPORT ---
-    function submitProgressReport(event) {
+    async function submitProgressReport(event) {
       event.preventDefault();
       
       const dept = document.getElementById('report-dept').value;
@@ -1557,7 +1571,6 @@
       const pendingItems = document.getElementById('report-pending').value.trim();
       const other = document.getElementById('report-other').value.trim();
       
-      // Simulate file upload name
       const fileInput = document.getElementById('report-file');
       let fileName = '';
       if (fileInput.files.length > 0) {
@@ -1577,14 +1590,35 @@
         timestamp: new Date().toISOString()
       };
 
-      const list = getReports();
-      list.unshift(newReport); // Add to top
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      const originalBtnHTML = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 mr-2 animate-spin"></i><span>上傳中...</span>`;
+      lucide.createIcons();
+
+      if (GOOGLE_SCRIPT_API_URL) {
+        try {
+          await fetch(GOOGLE_SCRIPT_API_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify(newReport)
+          });
+        } catch (e) {
+          console.error("Failed to post report to Google Sheets:", e);
+        }
+      }
+
+      const list = JSON.parse(localStorage.getItem(REPORTS_KEY)) || [];
+      list.unshift(newReport);
       localStorage.setItem(REPORTS_KEY, JSON.stringify(list));
 
-      // Reset form
+      await loadReports();
+
       document.getElementById('progress-report-form').reset();
       
-      // Re-prefill current time
       const reportTimeInput = document.getElementById('report-time');
       if (reportTimeInput) {
         const now = new Date();
@@ -1596,16 +1630,37 @@
       document.getElementById('report-file-name').textContent = '點選或拖曳檔案上傳';
       document.getElementById('report-file-name').classList.remove('text-slate-700', 'font-extrabold');
 
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHTML;
+      lucide.createIcons();
+
       renderReports();
-      alert('會議與進度記錄已成功發布並更新統計數據！');
+      alert('會議與進度記錄已成功發布並同步至 Google 試算表！');
     }
 
-    function deleteReport(id) {
-      if (!confirm('您確定要刪除這筆會議與進度記錄嗎？')) return;
+    async function deleteReport(id) {
+      if (!confirm('您確定要刪除這筆會議與進度記錄嗎？（此動作將同步自 Google 試算表刪除）')) return;
 
-      const list = getReports();
+      if (GOOGLE_SCRIPT_API_URL) {
+        try {
+          await fetch(GOOGLE_SCRIPT_API_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify({ action: 'delete', id: id })
+          });
+        } catch (e) {
+          console.error("Failed to delete report on Google Sheets:", e);
+        }
+      }
+
+      const list = JSON.parse(localStorage.getItem(REPORTS_KEY)) || [];
       const updated = list.filter(item => item.id !== id);
       localStorage.setItem(REPORTS_KEY, JSON.stringify(updated));
+      
+      await loadReports();
       renderReports();
     }
 
