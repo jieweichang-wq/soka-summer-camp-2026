@@ -527,12 +527,17 @@
         </div>
 
         <div class="mt-8 border-t border-slate-100 pt-6">
-          <div class="flex justify-between items-center mb-3">
-            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">最近登記動態</span>
+          <div class="flex justify-between items-center mb-3 cursor-pointer select-none hover:opacity-80 transition-opacity" onclick="toggleDaimokuLogsCollapse()">
+            <div class="flex items-center space-x-1.5">
+              <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">最近登記動態</span>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform duration-300" id="daimoku-chevron"></i>
+            </div>
             <span class="text-[10px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded border border-slate-200" id="daimoku-count-badge">0 筆記錄</span>
           </div>
-          <div class="max-h-[160px] overflow-y-auto pr-1 space-y-2" id="daimoku-log-list">
-            <div class="text-center text-xs text-slate-400 py-4">尚無登記紀錄，請在左側提交您的祈求分鐘數。</div>
+          <div class="hidden transition-all duration-300" id="daimoku-logs-collapse-container">
+            <div class="max-h-[160px] overflow-y-auto pr-1 space-y-2" id="daimoku-log-list">
+              <div class="text-center text-xs text-slate-400 py-4">尚無登記紀錄，請在左側提交您的祈求分鐘數。</div>
+            </div>
           </div>
         </div>
 
@@ -2008,6 +2013,7 @@
           
           await loadDaimokuLogs();
           renderDaimoku();
+          expandDaimokuLogs();
           alert('祈求登記成功，感謝您的發心！');
         } catch (e) {
           console.error("Failed to send Daimoku log to API:", e);
@@ -2017,6 +2023,7 @@
           document.getElementById('daimoku-name').value = '';
           document.getElementById('daimoku-minutes').value = '';
           renderDaimoku();
+          expandDaimokuLogs();
           alert('登記已儲存於本機（暫時無法連接網路伺服器）。');
         } finally {
           submitBtn.disabled = false;
@@ -2030,6 +2037,7 @@
         document.getElementById('daimoku-name').value = '';
         document.getElementById('daimoku-minutes').value = '';
         renderDaimoku();
+        expandDaimokuLogs();
         alert('登記已儲存（本機離線模式）。');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalHTML;
@@ -2076,6 +2084,29 @@
         } else {
           alert('請輸入有效的正整數！');
         }
+      }
+    }
+
+    function toggleDaimokuLogsCollapse() {
+      const container = document.getElementById('daimoku-logs-collapse-container');
+      const chevron = document.getElementById('daimoku-chevron');
+      if (container) {
+        if (container.classList.contains('hidden')) {
+          container.classList.remove('hidden');
+          if (chevron) chevron.classList.add('rotate-180');
+        } else {
+          container.classList.add('hidden');
+          if (chevron) chevron.classList.remove('rotate-180');
+        }
+      }
+    }
+
+    function expandDaimokuLogs() {
+      const container = document.getElementById('daimoku-logs-collapse-container');
+      const chevron = document.getElementById('daimoku-chevron');
+      if (container) {
+        container.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
       }
     }
 
