@@ -980,7 +980,7 @@
       try {
         const url = new URL(customSrc);
         if (!url.searchParams.has('dates')) {
-          url.searchParams.set('dates', '20260701/20260731');
+          url.searchParams.set('dates', '20260501/20260831');
         }
         url.searchParams.set('hl', 'zh_TW');
         return url.toString();
@@ -988,7 +988,7 @@
         let urlStr = customSrc;
         if (!urlStr.includes('dates=')) {
           const divider = urlStr.includes('?') ? '&' : '?';
-          urlStr = urlStr + divider + 'dates=20260701/20260731';
+          urlStr = urlStr + divider + 'dates=20260501/20260831';
         }
         if (!urlStr.includes('hl=')) {
           const divider = urlStr.includes('?') ? '&' : '?';
@@ -1257,14 +1257,14 @@
         url.searchParams.set('showCalendars', '0');
         url.searchParams.set('hl', 'zh_TW');
         if (!url.searchParams.has('dates')) {
-          url.searchParams.set('dates', '20260701/20260731');
+          url.searchParams.set('dates', '20260501/20260831');
         }
         return url.toString();
       } catch (e) {
         let urlStr = customSrc;
         if (!urlStr.includes('dates=')) {
           const divider = urlStr.includes('?') ? '&' : '?';
-          urlStr = urlStr + divider + 'dates=20260701/20260731';
+          urlStr = urlStr + divider + 'dates=20260501/20260831';
         }
         const divider = urlStr.includes('?') ? '&' : '?';
         return urlStr + divider + 'mode=AGENDA&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&hl=zh_TW';
