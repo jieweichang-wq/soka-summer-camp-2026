@@ -527,49 +527,12 @@
   <script>
     // --- GLOBAL CONSTANTS & STORAGE KEYS ---
     const CALENDAR_SRC_KEY = 'soka_camp_calendar_src';
-    const REPORTS_KEY = 'soka_camp_reports_v1';
+    const REPORTS_KEY = 'soka_camp_reports_v2';
     const GOOGLE_SCRIPT_API_URL = 'https://script.google.com/macros/s/AKfycbyt1Ul7i03y4gLMn10J0fuQ0pFTOqVoSlnTeJ_2JkW7Fe-yDZW37tCNkIkfeI2VMwQdOQ/exec';
     let reportsCached = [];
 
     // --- MOCK DATABASE STATE ---
-    const mockReports = [
-      {
-        id: 'rep-1',
-        meetingTime: '2026-05-20T14:00',
-        attendees: '林小華(記錄)、李大同、王美惠',
-        dept: '運營本部',
-        progress: 90,
-        content: '確認本屆營隊主題為「夢想起飛 · 勇氣啟航」，確認高雄六龜國小場地租借、水電及住宿配置，已發函完成申請。',
-        pendingItems: '1. 與六龜國小確認冷氣收費標準。\n2. 彙整隊員家長同意書與保險名冊。',
-        other: '預計下週召開第二次運營會議。',
-        fileName: 'operations_venue_approval.pdf',
-        timestamp: new Date(Date.now() - 3600000 * 24 * 3).toISOString() // 3 days ago
-      },
-      {
-        id: 'rep-2',
-        meetingTime: '2026-05-21T10:00',
-        attendees: '陳大同(記錄)、黃信介、小隊輔全體',
-        dept: '東海夢想&隊輔組',
-        progress: 80,
-        content: '進行第一階段團康破冰教案設計演練，小隊呼與隊旗範本製作完成。',
-        pendingItems: '1. 分配各小隊輔的負責小隊。\n2. 準備破冰遊戲道具材料清單。',
-        other: '隊輔們配合度極高，氣氛熱烈。',
-        fileName: 'icebreaker_game_draft.xlsx',
-        timestamp: new Date(Date.now() - 3600000 * 24 * 2).toISOString() // 2 days ago
-      },
-      {
-        id: 'rep-3',
-        meetingTime: '2026-05-22T09:00',
-        attendees: '施明德(記錄)、朝陽隊輔組成員',
-        dept: '朝陽勇氣&隊輔組',
-        progress: 85,
-        content: '完成大地遊戲「勇氣森林」五個關卡的流程及備案規劃，完成安全風險評估表格。',
-        pendingItems: '1. 採購闖關所需的防蚊液及醫藥用品。\n2. 製作關卡NPC道具。',
-        other: '高雄7月氣溫高，需加強防曬與補充水分宣導。',
-        fileName: 'courage_forest_sop.pdf',
-        timestamp: new Date(Date.now() - 3600000 * 24 * 1).toISOString() // 1 day ago
-      }
-    ];
+    const mockReports = [];
 
     // --- STATE VARIABLES ---
     let selectedEventDate = '2026-07-03'; // Default focused event on calendar load
@@ -1556,7 +1519,7 @@
 
       filteredReports.forEach((r) => {
         const item = document.createElement('div');
-        item.className = 'relative pl-6 sm:pl-10 group transition-all hover:translate-x-1 duration-200';
+        item.className = 'relative pl-6 sm:pl-10 group transition-all duration-200';
 
         let dotColor = 'bg-slate-300';
         if (r.dept === '運營本部') dotColor = 'bg-camp-sky ring-sky-100';
@@ -1580,7 +1543,7 @@
         let fileHTML = '';
         if (r.fileName) {
           fileHTML = `
-            <div class="mt-3.5 inline-flex items-center space-x-2 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-lg py-1.5 px-3 text-xs text-slate-500 font-bold transition-all" title="模擬點選下載">
+            <div class="inline-flex items-center space-x-2 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-lg py-1.5 px-3 text-xs text-slate-500 font-bold transition-all" title="模擬點選下載">
               <i data-lucide="paperclip" class="w-3.5 h-3.5 text-slate-400"></i>
               <span class="hover:underline cursor-pointer">${r.fileName}</span>
             </div>
@@ -1588,60 +1551,73 @@
         }
 
         item.innerHTML = `
-          <div class="absolute -left-[7px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-white ring-4 ${dotColor}"></div>
+          <div class="absolute -left-[7px] top-4 w-3.5 h-3.5 rounded-full border-2 border-white ring-4 ${dotColor}"></div>
           
           <div class="bg-white border border-slate-200/70 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all">
-            <div class="flex items-start justify-between gap-4">
-              <div class="space-y-3 flex-grow">
-                <div class="flex flex-wrap items-center gap-2">
-                  <span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-0.5 rounded border border-slate-200 font-extrabold">${r.dept}</span>
-                  <span class="text-xs bg-orange-50 text-camp-orange px-2 py-0.5 rounded border border-orange-100 font-bold flex items-center">
-                    <i data-lucide="calendar" class="w-3 h-3 mr-1"></i> 會議：${meetingTimeFormatted}
+            <!-- Clickable Header -->
+            <div class="flex items-center justify-between gap-4 cursor-pointer select-none" onclick="toggleReportCollapse('${r.id}')">
+              <div class="flex flex-wrap items-center gap-2 flex-grow min-w-0">
+                <span class="bg-slate-100 text-slate-700 text-xs px-2.5 py-0.5 rounded border border-slate-200 font-extrabold shrink-0">${r.dept}</span>
+                <span class="text-xs bg-orange-50 text-camp-orange px-2 py-0.5 rounded border border-orange-100 font-bold flex items-center shrink-0">
+                  <i data-lucide="calendar" class="w-3 h-3 mr-1"></i> 會議：${meetingTimeFormatted}
+                </span>
+                <span class="text-[10px] text-slate-400 font-bold font-mono hidden sm:inline-block shrink-0">(發布於 ${dateFormatted})</span>
+                <!-- Summary snippet -->
+                <span class="text-xs text-slate-400 font-semibold truncate flex-grow pl-2 border-l border-slate-200/80" id="summary-text-${r.id}">
+                  ${r.content ? r.content.replace(/\r?\n/g, ' ').substring(0, 35) + (r.content.length > 35 ? '...' : '') : '無內容'}
+                </span>
+              </div>
+              
+              <div class="flex items-center space-x-3 shrink-0">
+                <div class="flex flex-col items-center justify-center w-9 h-9 rounded-full bg-slate-50 border border-slate-200">
+                  <span class="text-[11px] font-black text-slate-700 leading-none">${r.progress}%</span>
+                </div>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200" id="chevron-${r.id}"></i>
+              </div>
+            </div>
+            
+            <!-- Collapsible Detail Section (Hidden by default) -->
+            <div class="hidden mt-4 pt-4 border-t border-slate-100 space-y-4 transition-all duration-350" id="details-${r.id}">
+              <div class="text-xs sm:text-sm space-y-2.5 text-slate-600 font-medium">
+                <div class="flex items-center space-x-1.5 text-slate-700">
+                  <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+                  <span class="font-extrabold text-xs">參與及記錄人員：</span>
+                  <span class="text-xs font-semibold bg-slate-50 px-2 py-0.5 rounded border border-slate-100">${r.attendees || '未填寫'}</span>
+                </div>
+
+                <div class="border-t border-slate-100 pt-2.5">
+                  <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
+                    <i data-lucide="check-square" class="w-3.5 h-3.5 mr-1 text-camp-orange"></i> 1. 運營項目與進度
                   </span>
-                  <span class="text-[10px] text-slate-400 font-bold font-mono">(發布於 ${dateFormatted})</span>
+                  <p class="pl-4.5 text-slate-600 whitespace-pre-line leading-relaxed">${r.content}</p>
                 </div>
 
-                <div class="text-xs sm:text-sm space-y-2.5 text-slate-600 font-medium">
-                  <div class="flex items-center space-x-1.5 text-slate-700">
-                    <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
-                    <span class="font-extrabold text-xs">參與及記錄人員：</span>
-                    <span class="text-xs font-semibold bg-slate-50 px-2 py-0.5 rounded border border-slate-100">${r.attendees || '未填寫'}</span>
-                  </div>
-
-                  <div class="border-t border-slate-100 pt-2">
-                    <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
-                      <i data-lucide="check-square" class="w-3.5 h-3.5 mr-1 text-camp-orange"></i> 1. 運營項目與進度
-                    </span>
-                    <p class="pl-4.5 text-slate-600 whitespace-pre-line">${r.content}</p>
-                  </div>
-
-                  <div class="border-t border-slate-100 pt-2">
-                    <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
-                      <i data-lucide="clock" class="w-3.5 h-3.5 mr-1 text-amber-500"></i> 2. 待完成項目
-                    </span>
-                    <p class="pl-4.5 text-slate-500 whitespace-pre-line">${r.pendingItems || '無'}</p>
-                  </div>
-
-                  ${r.other ? `
-                  <div class="border-t border-slate-100 pt-2">
-                    <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
-                      <i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400"></i> 3. 其他備註說明
-                    </span>
-                    <p class="pl-4.5 text-slate-500 italic whitespace-pre-line">${r.other}</p>
-                  </div>
-                  ` : ''}
+                <div class="border-t border-slate-100 pt-2.5">
+                  <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
+                    <i data-lucide="clock" class="w-3.5 h-3.5 mr-1 text-amber-500"></i> 2. 待完成項目
+                  </span>
+                  <p class="pl-4.5 text-slate-500 whitespace-pre-line leading-relaxed">${r.pendingItems || '無'}</p>
                 </div>
-                ${fileHTML}
+
+                ${r.other ? `
+                <div class="border-t border-slate-100 pt-2.5">
+                  <span class="block font-extrabold text-xs text-slate-800 mb-1 flex items-center">
+                    <i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-slate-400"></i> 3. 其他備註說明
+                  </span>
+                  <p class="pl-4.5 text-slate-500 italic whitespace-pre-line leading-relaxed">${r.other}</p>
+                </div>
+                ` : ''}
               </div>
 
-              <div class="text-right shrink-0 flex flex-col items-end space-y-2">
-                <div class="flex flex-col items-center justify-center w-11 h-11 rounded-full bg-slate-50 border border-slate-100">
-                  <span class="text-xs font-black text-slate-800 leading-none">${r.progress}%</span>
-                  <span class="text-[7px] text-slate-400 font-extrabold mt-0.5 uppercase">整體進度</span>
+              <!-- Footer with file attachments and delete button -->
+              <div class="flex items-center justify-between gap-3 pt-3.5 border-t border-slate-100">
+                <div>
+                  ${fileHTML}
                 </div>
                 
-                <button onclick="deleteReport('${r.id}')" class="opacity-0 group-hover:opacity-100 p-1.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-lg border border-transparent hover:border-rose-100 transition-all" title="刪除記錄">
+                <button onclick="deleteReport('${r.id}')" class="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl border border-slate-200/60 hover:border-rose-100 flex items-center space-x-1.5 transition-all text-xs font-bold" title="刪除記錄">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  <span>刪除日誌</span>
                 </button>
               </div>
             </div>
@@ -1652,6 +1628,24 @@
       });
 
       lucide.createIcons();
+    }
+
+    function toggleReportCollapse(reportId) {
+      const details = document.getElementById(`details-${reportId}`);
+      const chevron = document.getElementById(`chevron-${reportId}`);
+      const summaryText = document.getElementById(`summary-text-${reportId}`);
+      
+      if (details) {
+        if (details.classList.contains('hidden')) {
+          details.classList.remove('hidden');
+          if (chevron) chevron.classList.add('rotate-180');
+          if (summaryText) summaryText.classList.add('hidden');
+        } else {
+          details.classList.add('hidden');
+          if (chevron) chevron.classList.remove('rotate-180');
+          if (summaryText) summaryText.classList.remove('hidden');
+        }
+      }
     }
 
     // --- FORM ACTION: SUBMIT OP REPORT ---
