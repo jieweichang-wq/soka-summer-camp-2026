@@ -141,6 +141,10 @@
             <i data-lucide="calendar" class="w-4 h-4 text-camp-sky"></i>
             <span>Google行事曆</span>
           </a>
+          <a href="#daimoku-section" class="text-slate-600 hover:text-camp-sky font-bold transition-colors duration-200 flex items-center space-x-1.5 py-2 px-3 rounded-lg hover:bg-slate-100/50">
+            <i data-lucide="sparkles" class="w-4 h-4 text-indigo-500 animate-pulse"></i>
+            <span>祈求題目統計</span>
+          </a>
           <a href="#progress-section" class="text-slate-600 hover:text-camp-sky font-bold transition-colors duration-200 flex items-center space-x-1.5 py-2 px-3 rounded-lg hover:bg-slate-100/50">
             <i data-lucide="activity" class="w-4 h-4 text-camp-orange"></i>
             <span>運營進度回報</span>
@@ -176,6 +180,10 @@
         <a href="#calendar-section" class="mobile-nav-link block px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-bold hover:text-camp-sky flex items-center space-x-3 transition-colors">
           <i data-lucide="calendar" class="w-5 h-5 text-camp-sky"></i>
           <span>Google行事曆串接</span>
+        </a>
+        <a href="#daimoku-section" class="mobile-nav-link block px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-bold hover:text-camp-sky flex items-center space-x-3 transition-colors">
+          <i data-lucide="sparkles" class="w-5 h-5 text-indigo-500"></i>
+          <span>祈求題目統計</span>
         </a>
         <a href="#progress-section" class="mobile-nav-link block px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-bold hover:text-camp-sky flex items-center space-x-3 transition-colors">
           <i data-lucide="activity" class="w-5 h-5 text-camp-orange"></i>
@@ -352,6 +360,186 @@
   </div>
   </section>
 
+  <!-- ==================== SECTION 3: DAIMOKU TRACKER ==================== -->
+  <section id="daimoku-section" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-3xl mx-auto space-y-4 mb-12">
+      <div class="inline-flex items-center space-x-2 bg-indigo-50 text-indigo-600 px-4.5 py-1.5 rounded-full border border-indigo-100">
+        <i data-lucide="sparkles" class="w-4 h-4 animate-spin-slow"></i>
+        <span class="text-xs font-extrabold uppercase tracking-widest">Daimoku Stats</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">祈求題目數即時統計</h2>
+      <div class="w-16 h-1 bg-gradient-to-r from-indigo-500 to-camp-sky rounded-full mx-auto"></div>
+      <p class="text-slate-500 font-bold">1 分鐘計算為 60 遍題目。透過每日祈求，凝聚全體的力量，為營隊圓滿舉辦注入強大動力！</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- Left Form -->
+      <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/60 shadow-lg relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 to-camp-sky"></div>
+        
+        <div class="flex items-center space-x-2.5 pb-4 border-b border-slate-100 mb-6">
+          <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+            <i data-lucide="edit-3" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-slate-800">登記祈求題目</h3>
+            <p class="text-[10px] text-slate-400 font-bold">輸入您的名字與祈求分鐘數</p>
+          </div>
+        </div>
+
+        <form onsubmit="submitDaimoku(event)" class="space-y-5">
+          <div>
+            <label for="daimoku-dept" class="block text-xs font-extrabold text-slate-700 mb-1.5">所屬組織單位 *</label>
+            <select id="daimoku-dept" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-semibold text-xs text-slate-700 bg-white">
+              <option value="" disabled selected>請選擇您的組別 / 大學會</option>
+              <option value="運營本部">運營本部</option>
+              <option value="朝陽大學會">朝陽大學會</option>
+              <option value="東海大學會">東海大學會</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="daimoku-name" class="block text-xs font-extrabold text-slate-700 mb-1.5">您的姓名 *</label>
+            <input type="text" id="daimoku-name" required placeholder="例如：林大同" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-semibold text-xs placeholder:text-slate-400 text-slate-700" />
+          </div>
+
+          <div>
+            <label for="daimoku-minutes" class="block text-xs font-extrabold text-slate-700 mb-1.5">祈求時間 (分鐘) *</label>
+            <div class="relative rounded-xl shadow-sm">
+              <input type="number" id="daimoku-minutes" required min="1" max="1440" inputmode="numeric" placeholder="請輸入分鐘數，例如：30" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-semibold text-xs placeholder:text-slate-400 text-slate-700 pr-12" />
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                <span class="text-slate-400 text-xs font-bold">分鐘</span>
+              </div>
+            </div>
+            <p class="mt-1.5 text-[10px] text-indigo-500 font-bold flex items-center">
+              <i data-lucide="info" class="w-3.5 h-3.5 mr-1"></i>
+              <span>輸入後將自動換算為題目數（分鐘數 × 60 遍）</span>
+            </p>
+          </div>
+
+          <button type="submit" id="daimoku-submit-btn" class="w-full inline-flex justify-center items-center py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white font-extrabold text-xs shadow-md shadow-indigo-100 hover:shadow-lg transition-all">
+            <i data-lucide="plus-circle" class="w-4 h-4 mr-1.5"></i>
+            <span>提交登記</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Dashboard -->
+      <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/60 shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[500px]">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-500 to-camp-sky"></div>
+        
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+          <div class="flex items-center space-x-2.5">
+            <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
+              <i data-lucide="pie-chart" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-black text-slate-800">整體祈求進度與統計</h3>
+              <p class="text-[10px] text-slate-400 font-bold">即時統計整體累計題目進度 %</p>
+            </div>
+          </div>
+          
+          <button onclick="changeDaimokuTarget()" class="inline-flex items-center py-1.5 px-3 rounded-lg text-xs font-bold text-slate-500 hover:text-indigo-600 bg-slate-50 hover:bg-indigo-50 border border-slate-200 transition-all">
+            <i data-lucide="settings" class="w-3.5 h-3.5 mr-1"></i>
+            <span>設定目標</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-5 flex flex-col items-center justify-center">
+            <div class="relative w-40 h-40 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90">
+                <circle cx="80" cy="80" r="70" stroke="#f1f5f9" stroke-width="12" fill="transparent" />
+                <circle cx="80" cy="80" r="70" stroke="url(#indigo-grad)" stroke-width="12" fill="transparent" 
+                        stroke-dasharray="440" stroke-dashoffset="440" id="daimoku-progress-circle" class="transition-all duration-1000 ease-out" />
+                
+                <defs>
+                  <linearGradient id="indigo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4f46e5" />
+                    <stop offset="100%" stop-color="#0ea5e9" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              
+              <div class="absolute flex flex-col items-center justify-center">
+                <span class="text-3xl font-black text-slate-800 tracking-tight" id="daimoku-percent-val">0%</span>
+                <span class="text-[8px] font-extrabold text-slate-400 uppercase tracking-widest mt-1">目前進度</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-7 space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-slate-50 border border-slate-100 p-3.5 rounded-2xl">
+                <span class="block text-[10px] text-slate-400 font-extrabold uppercase">總累計題目數</span>
+                <span class="text-lg font-black text-indigo-600 mt-1 block" id="daimoku-total-val">0 遍</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-100 p-3.5 rounded-2xl">
+                <span class="block text-[10px] text-slate-400 font-extrabold uppercase">總累計時間</span>
+                <span class="text-lg font-black text-slate-800 mt-1 block" id="daimoku-minutes-val">0 分鐘</span>
+              </div>
+            </div>
+            
+            <div class="bg-indigo-50/50 border border-indigo-100/60 p-4 rounded-2xl">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-indigo-700 font-bold flex items-center">
+                  <i data-lucide="target" class="w-4 h-4 mr-1"></i> 目標題目數
+                </span>
+                <span class="text-slate-800 font-black" id="daimoku-target-val">500,000 遍</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 space-y-3.5 border-t border-slate-100 pt-6">
+          <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block">各大學會 / 組別祈求分佈</span>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1.5 text-slate-600">
+                <span class="flex items-center"><span class="w-2.5 h-2.5 bg-indigo-500 rounded-full mr-2"></span>運營本部</span>
+                <span class="font-extrabold text-slate-800" id="daimoku-hq-stat">0 遍 (0%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 0%" id="daimoku-hq-bar"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1.5 text-slate-600">
+                <span class="flex items-center"><span class="w-2.5 h-2.5 bg-sky-500 rounded-full mr-2"></span>東海大學會</span>
+                <span class="font-extrabold text-slate-800" id="daimoku-tunghai-stat">0 遍 (0%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: 0%" id="daimoku-tunghai-bar"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1.5 text-slate-600">
+                <span class="flex items-center"><span class="w-2.5 h-2.5 bg-teal-500 rounded-full mr-2"></span>朝陽大學會</span>
+                <span class="font-extrabold text-slate-800" id="daimoku-chaoyang-stat">0 遍 (0%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-teal-500 h-full rounded-full transition-all duration-500" style="width: 0%" id="daimoku-chaoyang-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 border-t border-slate-100 pt-6">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">最近登記動態</span>
+            <span class="text-[10px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded border border-slate-200" id="daimoku-count-badge">0 筆記錄</span>
+          </div>
+          <div class="max-h-[160px] overflow-y-auto pr-1 space-y-2" id="daimoku-log-list">
+            <div class="text-center text-xs text-slate-400 py-4">尚無登記紀錄，請在左側提交您的祈求分鐘數。</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ==================== SECTION 2: OPERATION PROGRESS REPORTING ==================== -->
   <section id="progress-section" class="py-16 bg-slate-100/60 border-y border-slate-200/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -506,10 +694,11 @@
 
         <!-- Links Columns -->
         <div class="md:col-span-4 space-y-3">
-          <h4 class="text-sm font-extrabold text-white uppercase tracking-wider">兩大核心功能</h4>
+          <h4 class="text-sm font-extrabold text-white uppercase tracking-wider">三大核心功能</h4>
           <ul class="space-y-2 text-xs sm:text-sm font-semibold">
             <li><a href="#calendar-section" class="hover:text-white transition-colors">1. Google行事曆串接</a></li>
-            <li><a href="#progress-section" class="hover:text-white transition-colors">2. 運營準備進度回報</a></li>
+            <li><a href="#daimoku-section" class="hover:text-white transition-colors">2. 祈求題目數即時統計</a></li>
+            <li><a href="#progress-section" class="hover:text-white transition-colors">3. 運營準備進度回報</a></li>
           </ul>
         </div>
       </div>
@@ -609,6 +798,11 @@
       // 4. Render Reports & Timeline
       loadReports().then(() => {
         renderReports();
+      });
+
+      // 5. Render Daimoku Tracker
+      loadDaimokuLogs().then(() => {
+        renderDaimoku();
       });
 
       // 6. Init Lucide Icons
@@ -1751,6 +1945,215 @@
       
       await loadReports();
       renderReports();
+    }
+
+    // --- FEATURE 3: DAIMOKU TRACKER STATE ---
+    let daimokuLogs = [];
+    let daimokuTarget = Number(localStorage.getItem('soka_camp_daimoku_target')) || 500000;
+
+    async function loadDaimokuLogs() {
+      if (GOOGLE_SCRIPT_API_URL) {
+        try {
+          const res = await fetch(`${GOOGLE_SCRIPT_API_URL}?type=daimoku&_t=${Date.now()}`);
+          const data = await res.json();
+          data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          daimokuLogs = data;
+          localStorage.setItem('soka_camp_daimoku_logs', JSON.stringify(data));
+        } catch (e) {
+          console.error("Failed to fetch Daimoku logs, using LocalStorage fallback:", e);
+          daimokuLogs = JSON.parse(localStorage.getItem('soka_camp_daimoku_logs')) || [];
+        }
+      } else {
+        daimokuLogs = JSON.parse(localStorage.getItem('soka_camp_daimoku_logs')) || [];
+      }
+    }
+
+    async function submitDaimoku(event) {
+      event.preventDefault();
+      
+      const dept = document.getElementById('daimoku-dept').value;
+      const name = document.getElementById('daimoku-name').value.trim();
+      const minutes = Number(document.getElementById('daimoku-minutes').value);
+      const daimokuCount = minutes * 60;
+      
+      const newDaimoku = {
+        id: 'dm-' + Date.now(),
+        type: 'daimoku',
+        dept,
+        name,
+        minutes,
+        daimokuCount,
+        timestamp: new Date().toISOString()
+      };
+
+      const submitBtn = document.getElementById('daimoku-submit-btn');
+      const originalHTML = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 mr-2 animate-spin"></i><span>傳送中...</span>`;
+      lucide.createIcons();
+
+      if (GOOGLE_SCRIPT_API_URL) {
+        try {
+          await fetch(GOOGLE_SCRIPT_API_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify(newDaimoku)
+          });
+          
+          document.getElementById('daimoku-name').value = '';
+          document.getElementById('daimoku-minutes').value = '';
+          
+          await loadDaimokuLogs();
+          renderDaimoku();
+          alert('祈求登記成功，感謝您的發心！');
+        } catch (e) {
+          console.error("Failed to send Daimoku log to API:", e);
+          daimokuLogs.unshift(newDaimoku);
+          localStorage.setItem('soka_camp_daimoku_logs', JSON.stringify(daimokuLogs));
+          
+          document.getElementById('daimoku-name').value = '';
+          document.getElementById('daimoku-minutes').value = '';
+          renderDaimoku();
+          alert('登記已儲存於本機（暫時無法連接網路伺服器）。');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalHTML;
+          lucide.createIcons();
+        }
+      } else {
+        daimokuLogs.unshift(newDaimoku);
+        localStorage.setItem('soka_camp_daimoku_logs', JSON.stringify(daimokuLogs));
+        
+        document.getElementById('daimoku-name').value = '';
+        document.getElementById('daimoku-minutes').value = '';
+        renderDaimoku();
+        alert('登記已儲存（本機離線模式）。');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalHTML;
+        lucide.createIcons();
+      }
+    }
+
+    async function deleteDaimokuLog(id) {
+      if (!confirm('是否確定要刪除這筆登記紀錄？')) return;
+      
+      if (GOOGLE_SCRIPT_API_URL) {
+        try {
+          await fetch(GOOGLE_SCRIPT_API_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            body: JSON.stringify({ type: 'daimoku', action: 'delete', id: id })
+          });
+          await loadDaimokuLogs();
+          renderDaimoku();
+        } catch (e) {
+          console.error("Failed to delete Daimoku log from API:", e);
+          daimokuLogs = daimokuLogs.filter(d => d.id !== id);
+          localStorage.setItem('soka_camp_daimoku_logs', JSON.stringify(daimokuLogs));
+          renderDaimoku();
+        }
+      } else {
+        daimokuLogs = daimokuLogs.filter(d => d.id !== id);
+        localStorage.setItem('soka_camp_daimoku_logs', JSON.stringify(daimokuLogs));
+        renderDaimoku();
+      }
+    }
+
+    function changeDaimokuTarget() {
+      const newTarget = prompt('請輸入新的目標題目數（例如：1000000）：', daimokuTarget);
+      if (newTarget !== null) {
+        const parsed = parseInt(newTarget, 10);
+        if (!isNaN(parsed) && parsed > 0) {
+          daimokuTarget = parsed;
+          localStorage.setItem('soka_camp_daimoku_target', parsed);
+          renderDaimoku();
+        } else {
+          alert('請輸入有效的正整數！');
+        }
+      }
+    }
+
+    function renderDaimoku() {
+      const totalMinutes = daimokuLogs.reduce((acc, log) => acc + Number(log.minutes || 0), 0);
+      const totalDaimoku = daimokuLogs.reduce((acc, log) => acc + Number(log.daimokuCount || 0), 0);
+      
+      const percent = daimokuTarget > 0 ? Math.min(100, Math.round((totalDaimoku / daimokuTarget) * 100)) : 0;
+      
+      document.getElementById('daimoku-percent-val').textContent = `${percent}%`;
+      document.getElementById('daimoku-total-val').textContent = `${totalDaimoku.toLocaleString()} 遍`;
+      document.getElementById('daimoku-minutes-val').textContent = `${totalMinutes.toLocaleString()} 分鐘`;
+      document.getElementById('daimoku-target-val').textContent = `${daimokuTarget.toLocaleString()} 遍`;
+      document.getElementById('daimoku-count-badge').textContent = `${daimokuLogs.length} 筆記錄`;
+      
+      const circle = document.getElementById('daimoku-progress-circle');
+      if (circle) {
+        const offset = 440 - (percent / 100) * 440;
+        circle.setAttribute('stroke-dashoffset', offset);
+      }
+      
+      const deptSums = { '運營本部': 0, '朝陽大學會': 0, '東海大學會': 0 };
+      daimokuLogs.forEach(log => {
+        if (deptSums[log.dept] !== undefined) {
+          deptSums[log.dept] += Number(log.daimokuCount || 0);
+        }
+      });
+      
+      const overallTotal = Object.values(deptSums).reduce((a, b) => a + b, 0) || 1;
+      
+      Object.keys(deptSums).forEach(dept => {
+        const sum = deptSums[dept];
+        const deptPct = Math.round((sum / overallTotal) * 100);
+        
+        let statId = '', barId = '';
+        if (dept === '運營本部') { statId = 'daimoku-hq-stat'; barId = 'daimoku-hq-bar'; }
+        if (dept === '東海大學會') { statId = 'daimoku-tunghai-stat'; barId = 'daimoku-tunghai-bar'; }
+        if (dept === '朝陽大學會') { statId = 'daimoku-chaoyang-stat'; barId = 'daimoku-chaoyang-bar'; }
+        
+        const statEl = document.getElementById(statId);
+        const barEl = document.getElementById(barId);
+        
+        if (statEl) statEl.textContent = `${sum.toLocaleString()} 遍 (${deptPct}%)`;
+        if (barEl) barEl.style.width = `${deptPct}%`;
+      });
+      
+      const logList = document.getElementById('daimoku-log-list');
+      if (daimokuLogs.length === 0) {
+        logList.innerHTML = `<div class="text-center text-xs text-slate-400 py-4">尚無登記紀錄，請在左側提交您的祈求分鐘數。</div>`;
+      } else {
+        logList.innerHTML = daimokuLogs.map(log => {
+          const date = new Date(log.timestamp).toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+          let deptColorClass = 'bg-slate-100 text-slate-600';
+          if (log.dept === '運營本部') deptColorClass = 'bg-indigo-50 text-indigo-700 border-indigo-100';
+          if (log.dept === '東海大學會') deptColorClass = 'bg-sky-50 text-sky-700 border-sky-100';
+          if (log.dept === '朝陽大學會') deptColorClass = 'bg-teal-50 text-teal-700 border-teal-100';
+          
+          return `
+            <div class="flex items-center justify-between p-2.5 hover:bg-slate-50 border border-slate-100 rounded-xl transition-all text-xs font-semibold">
+              <div class="flex items-center space-x-2.5 truncate">
+                <span class="px-2 py-0.5 rounded border text-[10px] ${deptColorClass} font-extrabold shrink-0">${log.dept}</span>
+                <span class="font-extrabold text-slate-800 shrink-0">${log.name}</span>
+                <span class="text-slate-400 shrink-0">登記</span>
+                <span class="text-indigo-600 font-extrabold shrink-0">${log.minutes} 分鐘</span>
+                <span class="text-slate-400 font-medium truncate hidden sm:inline">(${Number(log.daimokuCount).toLocaleString()} 遍題目)</span>
+              </div>
+              <div class="flex items-center space-x-2.5 shrink-0">
+                <span class="text-[10px] text-slate-400 font-mono">${date}</span>
+                <button onclick="deleteDaimokuLog('${log.id}')" class="text-slate-300 hover:text-rose-500 p-1 rounded transition-colors" title="刪除紀錄">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      
+      lucide.createIcons();
     }
 
   </script>
