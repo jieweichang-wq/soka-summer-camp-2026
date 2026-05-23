@@ -661,8 +661,10 @@
       initCountdown();
 
       // 3. Render Calendar
-      selectedEventDate = getLatestOrNearestEventDate();
-      renderCalendar();
+      loadCalendarEvents().then(() => {
+        selectedEventDate = getLatestOrNearestEventDate();
+        renderCalendar();
+      });
 
 
       // 4. Render Reports & Timeline
@@ -786,10 +788,13 @@
         filterTimeline('all');
 
         // Reload views
-        renderCalendar();
-        loadReports().then(() => {
-          filterTimeline('all');
-          lucide.createIcons();
+        loadCalendarEvents().then(() => {
+          selectedEventDate = getLatestOrNearestEventDate();
+          renderCalendar();
+          loadReports().then(() => {
+            filterTimeline('all');
+            lucide.createIcons();
+          });
         });
         
         alert('系統資料已重置為初始展示狀態！');
@@ -887,9 +892,82 @@
     }
 
     // ==================== FEATURE 1: GOOGLE CALENDAR LOGIC ====================
+    let activeEvents = localEvents; // Default to local offline events
+
+    function extractCalendarId(src) {
+      if (!src || src === 'offline') return null;
+      try {
+        if (src.startsWith('http://') || src.startsWith('https://')) {
+          const url = new URL(src);
+          return url.searchParams.get('src');
+        }
+      } catch (e) {
+        const match = src.match(/[?&]src=([^&]+)/);
+        if (match && match[1]) {
+          return decodeURIComponent(match[1]);
+        }
+      }
+      if (!src.includes('<iframe') && !src.includes('http')) {
+        return src;
+      }
+      return null;
+    }
+
+    async function loadCalendarEvents() {
+      const customSrc = localStorage.getItem(CALENDAR_SRC_KEY);
+      const calendarId = extractCalendarId(customSrc);
+      
+      if (calendarId && GOOGLE_SCRIPT_API_URL) {
+        try {
+          const res = await fetch(`${GOOGLE_SCRIPT_API_URL}?calendarId=${encodeURIComponent(calendarId)}`);
+          const data = await res.json();
+          
+          if (data && Array.isArray(data)) {
+            const googleEvents = {};
+            data.forEach(ev => {
+              const startDateObj = new Date(ev.startTime);
+              const year = startDateObj.getFullYear();
+              const month = String(startDateObj.getMonth() + 1).padStart(2, '0');
+              const day = String(startDateObj.getDate()).padStart(2, '0');
+              const dateKey = `${year}-${month}-${day}`;
+              
+              const startHours = String(startDateObj.getHours()).padStart(2, '0');
+              const startMins = String(startDateObj.getMinutes()).padStart(2, '0');
+              const endDateObj = new Date(ev.endTime);
+              const endHours = String(endDateObj.getHours()).padStart(2, '0');
+              const endMins = String(endDateObj.getMinutes()).padStart(2, '0');
+              const timeRange = `${startHours}:${startMins} - ${endHours}:${endMins}`;
+              
+              googleEvents[dateKey] = {
+                title: ev.title,
+                time: timeRange,
+                location: ev.location,
+                desc: ev.desc,
+                owner: ev.owner
+              };
+            });
+            
+            if (Object.keys(googleEvents).length > 0) {
+              activeEvents = googleEvents;
+              console.log("Successfully synchronized Google Calendar events:", activeEvents);
+            } else {
+              activeEvents = localEvents;
+            }
+          } else {
+            activeEvents = localEvents;
+          }
+        } catch (e) {
+          console.error("Failed to load Google Calendar events from API, falling back to local events:", e);
+          activeEvents = localEvents;
+        }
+      } else {
+        activeEvents = localEvents;
+      }
+    }
+
     function getLatestOrNearestEventDate() {
       const todayStr = new Date().toISOString().split('T')[0]; // e.g. "2026-05-23"
-      const eventDates = Object.keys(localEvents).sort();
+      const eventDates = Object.keys(activeEvents).sort();
       for (const d of eventDates) {
         if (d >= todayStr) {
           return d;
@@ -1373,7 +1451,10 @@
 
       if (embedSrc) {
         localStorage.setItem(CALENDAR_SRC_KEY, embedSrc);
-        renderCalendar();
+        loadCalendarEvents().then(() => {
+          selectedEventDate = getLatestOrNearestEventDate();
+          renderCalendar();
+        });
         alert('Google 行事曆連結儲存成功，已成功串接！');
       } else {
         alert('無法解析輸入的網址，請確認日曆 ID 或 iframe 格式是否正確。');
@@ -1384,7 +1465,10 @@
       if (confirm('是否確認清除自訂的 Google 行事曆連結？日曆將切換回本機離線模式。')) {
         localStorage.setItem(CALENDAR_SRC_KEY, 'offline');
         document.getElementById('calendar-input').value = '';
-        renderCalendar();
+        loadCalendarEvents().then(() => {
+          selectedEventDate = getLatestOrNearestEventDate();
+          renderCalendar();
+        });
       }
     }
 
